@@ -4,22 +4,23 @@
 #include <memory>
 #include "Film.h"
 #include "GestionnaireAuteurs.h"
+#include <vector>
 
 class Librairie
 {
 public:
     Librairie();
-    Librairie(const Librairie&);
-    Librairie& operator=(const Librairie&);
+    Librairie(const Librairie& librairie);
+    Librairie& operator=(const Librairie& librairie);
     ~Librairie();
 
-    void ajouterFilm(Film* film);
-    void retirerFilm(const std::string& nomFilm);
+    Librairie& operator+=(Film* film);
+    Librairie& operator-=(const std::string& nomFilm);
     Film* chercherFilm(const std::string& nomFilm);
     bool chargerFilmsDepuisFichier(const std::string& nomFichier,
                                    GestionnaireAuteurs& gestionnaireAuteurs);
     bool chargerRestrictionsDepuisFichiers(const std::string& nomFichier);
-    void afficher(std::ostream& stream) const;
+    friend std::ostream& operator<<(std::ostream& stream, const Librairie& librairie);
 
 	const std::vector<std::unique_ptr<Film>>& getFilms() const;
     std::size_t getNbFilms() const;
@@ -31,9 +32,7 @@ private:
     int trouverIndexFilm(const std::string& nomFilm) const;
 
     // Movies array
-    Film** films_;
-    std::size_t nbFilms_;
-    std::size_t capaciteFilms_;
+    std::vector<std::unique_ptr<Film>> films_;
 };
 
 #endif // LIBRAIRIE_H
