@@ -2,6 +2,7 @@
 #define GESTIONNAIREAUTEURS_H
 
 #include <string>
+#include <vector>
 #include "Auteur.h"
 
 class GestionnaireAuteurs
@@ -15,6 +16,10 @@ public:
     void afficher(std::ostream& stream) const;
 
     std::size_t getNbAuteurs() const;
+
+    friend std::ostream& operator<<(std::ostream& flux,
+                                    const GestionnaireAuteurs& gestionnaireAuteur);
+    bool operator+=(const Auteur& auteur);
 
     static constexpr std::size_t NB_AUTEURS_MAX = 16;
 
