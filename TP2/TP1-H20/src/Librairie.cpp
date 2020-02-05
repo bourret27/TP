@@ -19,12 +19,14 @@ Librairie::Librairie() : films_(std::vector<std::unique_ptr<Film>>(CAPACITE_FILM
 
 }
 
-Librairie::Librairie(const Librairie& librairie) : Librairie()
+Librairie::Librairie(const Librairie& librairie)
+    : Librairie()
 {
-    for (std::size_t i = 0; i < librairie.films_.size(); i++)
+    /*for (std::size_t i = 0; i < librairie.films_.size(); i++)
     {
-        *this += new Film(*librairie.films_[i]);
-    }
+        this->films_[i] = std::move((*librairie.films_[i]));
+        
+    }*/
 }
 
 Librairie& Librairie::operator=(const Librairie& librairie)

@@ -7,24 +7,24 @@
 //! Constructeur de la classe GestionnaireAuteurs
 GestionnaireAuteurs::GestionnaireAuteurs()
     : auteurs_(std::vector<Auteur>(
-          NB_AUTEURS_MAX)) // ne pas changer. le vecteur doit etre initialiser a 16 ici
-    , nbAuteurs_(0)
+          NB_AUTEURS_MAX)), // ne pas changer. le vecteur doit etre initialiser a 16 ici
+        nbAuteurs_(0)
 {
 }
 
 //! Méthode qui ajoute un auteur à la liste des auteurs
 //! \param auteur L'auteur à ajouter
 //! \return       Un bool représentant si l'opération a fonctionnné
-bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
+/*bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
 {
     if (nbAuteurs_ >= NB_AUTEURS_MAX)
     {
         return false;
     }
 
-    auteurs_[nbAuteurs_++] = auteur;
+    auteurs_.push_back(auteur);
     return true;
-}
+}*/
 
 bool GestionnaireAuteurs::operator+=(const Auteur& auteur)
 {
@@ -34,7 +34,7 @@ bool GestionnaireAuteurs::operator+=(const Auteur& auteur)
     }
 
     auteurs_[nbAuteurs_] = auteur;
-    nbAuteurs_ = auteurs_.size();
+    nbAuteurs_ ++;
     return true;
 }
 
@@ -82,14 +82,14 @@ bool GestionnaireAuteurs::chargerDepuisFichier(const std::string& nomFichier)
 
 //! Méthode qui affiche la liste des auteurs
 //! \param stream Le stream dans lequel afficher
-void GestionnaireAuteurs::afficher(std::ostream& stream) const
+/*void GestionnaireAuteurs::afficher(std::ostream& stream) const
 {
     for (std::size_t i = 0; i < nbAuteurs_; i++)
     {
         auteurs_[i].afficher(stream);
         stream << '\n';
     }
-}
+}*/
 
 std::ostream& operator<<(std::ostream& flux, const GestionnaireAuteurs& gestionnaireAuteurs)
 {
@@ -104,7 +104,7 @@ std::ostream& operator<<(std::ostream& flux, const GestionnaireAuteurs& gestionn
 //! \return Le nombre d'auteurs
 std::size_t GestionnaireAuteurs::getNbAuteurs() const
 {
-    return auteurs_.size();
+    return nbAuteurs_;
 }
 
 //! Méthode qui ajoute un auteur avec un string
@@ -120,7 +120,7 @@ bool GestionnaireAuteurs::lireLigneAuteur(const std::string& ligne)
 
     if (stream >> std::quoted(nomAuteur) >> age)
     {
-        return *this += Auteur(nomAuteur, age);
+        return ((*this) += Auteur(nomAuteur, age));
     }
     return false;
 }

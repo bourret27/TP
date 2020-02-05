@@ -9,7 +9,7 @@ public:
     Auteur() = default;
     Auteur(const std::string& nom, unsigned int anneeDeNaissance);
 
-    void afficher(std::ostream& stream) const;
+    //void afficher(std::ostream& stream) const;
     friend std::ostream& operator<<(std::ostream& o, const Auteur& auteur);
     friend bool operator==(const std::string& nom, const Auteur& auteur);
     friend bool operator==(const Auteur& auteur, const std::string& nom);
