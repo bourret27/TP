@@ -62,6 +62,18 @@ Film::Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays
 {
 }
 
+Film::Film(const Film& filmOriginal)
+    : nom_(filmOriginal.nom_)
+    , anneeDeSortie_(filmOriginal.anneeDeSortie_)
+    , genre_(filmOriginal.genre_)
+    , pays_(filmOriginal.pays_)
+    , estRestreintParAge_(filmOriginal.estRestreintParAge_)
+    , auteur_(filmOriginal.auteur_)
+    , paysRestreints_(filmOriginal.paysRestreints_)
+{
+    
+}
+
 Film::~Film()
 {
     auteur_->setNbFilms(auteur_->getNbFilms() - 1);

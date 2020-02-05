@@ -19,14 +19,18 @@ Librairie::Librairie() : films_(std::vector<std::unique_ptr<Film>>(CAPACITE_FILM
 
 }
 
-Librairie::Librairie(const Librairie& librairie)
+Librairie::Librairie(const Librairie& librairie) : Librairie()
 {
-
+    for (std::size_t i = 0; i < librairie.films_.size(); i++)
+    {
+        *this += new Film(*librairie.films_[i]);
+    }
 }
 
 Librairie& Librairie::operator=(const Librairie& librairie)
 {
-
+    films_ = Librairie(librairie).films_;
+    return *this;
 }
 
 
@@ -47,7 +51,7 @@ const std::vector<std::unique_ptr<Film>>& Librairie::getFilms() const
 Librairie& Librairie::operator+=(Film* film)
 {
     if (film != nullptr)
-        films_.push_back(std::move(std::make_unique<Film>(film)));
+        films_.push_back(std::move(std::make_unique<Film>(*film)));
     return *this;
 }
 
@@ -139,6 +143,7 @@ std::ostream& operator<<(std::ostream& stream, const Librairie& librairie)
         stream << *librairie.films_[i];
         stream << '\n';
     }
+    return stream;
 }
 
 //! Méthode qui retourne le nombre de films

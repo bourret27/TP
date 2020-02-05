@@ -24,6 +24,7 @@ public:
     Film() = default;
     Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays pays,
          bool estRestreintParAge, Auteur* auteur);
+    Film(const Film& filmOriginal);
 
     void ajouterPaysRestreint(Pays pays);
     void supprimerPaysRestreints();
