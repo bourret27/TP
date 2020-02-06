@@ -5,7 +5,6 @@
 
 namespace
 {
-    constexpr std::size_t CAPACITE_PAYS_INITIALE = 2;
 
     //! Fonction qui convertit le enum Film::Genre en string
     //! \param genre    Le genre à convertir
@@ -58,7 +57,7 @@ Film::Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays
     , pays_(pays)
     , estRestreintParAge_(estRestreintParAge)
     , auteur_(auteur)
-    , paysRestreints_(std::vector<Pays>(CAPACITE_PAYS_INITIALE))
+    , paysRestreints_(std::vector<Pays>())
 {
 }
 

@@ -239,7 +239,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
 
     // test 13 constructeur de copie de librairie.
     librairie += new Film("tes2t", 1, Film::Genre::Action, Pays::Canada, false, &auteurTest8);
@@ -252,7 +252,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
 
     // test 14 operateur= de librairie.
     Librairie lib3;

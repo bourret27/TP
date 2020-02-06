@@ -9,12 +9,11 @@
 
 namespace
 {
-    constexpr std::size_t CAPACITE_FILMS_INITIALE = 2;
     constexpr int FILM_INEXSISTANT = -1;
 } // namespace
 
 //! Constructeur de la classe Librairie
-Librairie::Librairie() : films_(std::vector<std::unique_ptr<Film>>(CAPACITE_FILMS_INITIALE))
+Librairie::Librairie() : films_(std::vector<std::unique_ptr<Film>>())
 {
 
 }
@@ -22,11 +21,11 @@ Librairie::Librairie() : films_(std::vector<std::unique_ptr<Film>>(CAPACITE_FILM
 Librairie::Librairie(const Librairie& librairie)
     : Librairie()
 {
-    /*for (std::size_t i = 0; i < librairie.films_.size(); i++)
+    for (std::size_t i = 0; i < librairie.films_.size(); i++)
     {
-        this->films_[i] = std::move((*librairie.films_[i]));
-        
-    }*/
+        //films_[i] = std::move((*librairie.films_[i]));
+        films_.push_back(std::move(std::make_unique<Film>(*librairie.films_[i])));
+    }
 }
 
 Librairie& Librairie::operator=(const Librairie& librairie)
