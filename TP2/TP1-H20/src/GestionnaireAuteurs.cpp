@@ -6,26 +6,14 @@
 
 //! Constructeur de la classe GestionnaireAuteurs
 GestionnaireAuteurs::GestionnaireAuteurs()
-    : auteurs_(std::vector<Auteur>(
-          NB_AUTEURS_MAX)), // ne pas changer. le vecteur doit etre initialiser a 16 ici
-        nbAuteurs_(0)
+    : auteurs_(std::vector<Auteur>(NB_AUTEURS_MAX)), // ne pas changer. le vecteur doit etre initialiser a 16 ici
+      nbAuteurs_(0)
 {
 }
 
-//! Méthode qui ajoute un auteur à la liste des auteurs
+//! Surcharge de l'opérateur += qui ajoute un auteur à la liste des auteurs
 //! \param auteur L'auteur à ajouter
 //! \return       Un bool représentant si l'opération a fonctionnné
-/*bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
-{
-    if (nbAuteurs_ >= NB_AUTEURS_MAX)
-    {
-        return false;
-    }
-
-    auteurs_.push_back(auteur);
-    return true;
-}*/
-
 bool GestionnaireAuteurs::operator+=(const Auteur& auteur)
 {
     if (nbAuteurs_ >= NB_AUTEURS_MAX)
@@ -33,8 +21,7 @@ bool GestionnaireAuteurs::operator+=(const Auteur& auteur)
         return false;
     }
 
-    auteurs_[nbAuteurs_] = auteur;
-    nbAuteurs_ ++;
+    auteurs_[nbAuteurs_++] = auteur;
     return true;
 }
 
@@ -45,7 +32,7 @@ Auteur* GestionnaireAuteurs::chercherAuteur(const std::string& nomAuteur)
 {
     for (std::size_t i = 0; i < nbAuteurs_; i++)
     {
-        if (auteurs_[i] == nomAuteur)
+        if (nomAuteur == auteurs_[i])
         {
             return &auteurs_[i];
         }
@@ -80,17 +67,10 @@ bool GestionnaireAuteurs::chargerDepuisFichier(const std::string& nomFichier)
     return false;
 }
 
-//! Méthode qui affiche la liste des auteurs
+//! Surcharge de l'opérateur << qui affiche la liste des auteurs
 //! \param stream Le stream dans lequel afficher
-/*void GestionnaireAuteurs::afficher(std::ostream& stream) const
-{
-    for (std::size_t i = 0; i < nbAuteurs_; i++)
-    {
-        auteurs_[i].afficher(stream);
-        stream << '\n';
-    }
-}*/
-
+//! \param gestionnaireAuteurs Le gestionnaire d'auteurs à afficher
+//! \return Une référence du flux où sera écrit le gestionnaire
 std::ostream& operator<<(std::ostream& flux, const GestionnaireAuteurs& gestionnaireAuteurs)
 {
     for (std::size_t i = 0; i < gestionnaireAuteurs.nbAuteurs_; ++i)
