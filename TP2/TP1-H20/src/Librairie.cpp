@@ -1,3 +1,11 @@
+/*
+* Classe qui définit une librairie.
+* \file   Librairie.cpp
+* \author William Bourret et Philippe De Blois
+* \date   10 fevrier 2020
+* Créé le 10 fevrier 2020
+*/
+
 #include "Librairie.h"
 #include <fstream>
 #include <iomanip>

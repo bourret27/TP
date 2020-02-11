@@ -1,3 +1,11 @@
+/*
+* Classe qui définit un film.
+* \file   Film.cpp
+* \author William Bourret et Philippe De Blois
+* \date   10 fevrier 2020
+* Créé le 10 fevrier 2020
+*/
+
 #include "Film.h"
 #include <iostream>
 #include "Pays.h"

@@ -1,3 +1,11 @@
+/*
+* Classe qui définit un gestionnaire auteurs.
+* \file   GestionnaireAuteurs.cpp
+* \author William Bourret et Philippe De Blois
+* \date   10 fevrier 2020
+* Créé le 10 fevrier 2020
+*/
+
 #include "GestionnaireAuteurs.h"
 #include <fstream>
 #include <iomanip>

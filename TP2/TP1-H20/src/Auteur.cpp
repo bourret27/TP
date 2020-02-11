@@ -1,3 +1,11 @@
+/*
+* Classe qui définit un auteur.
+* \file   Auteur.cpp
+* \author William Bourret et Philippe De Blois
+* \date   10 fevrier 2020
+* Créé le 10 fevrier 2020
+*/
+
 #include "Auteur.h"
 #include <iostream>
 
