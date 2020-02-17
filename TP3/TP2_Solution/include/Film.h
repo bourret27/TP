@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 #include "Auteur.h"
 #include "Pays.h"
 
@@ -11,14 +12,16 @@ class Film
 public:
     enum class Genre
     {
-        first_ = -1,
         Action,
         Aventure,
         Comedie,
         Horreur,
         Romance,
-        last_
+		first_ = Action,
+        last_ = Romance
     };
+
+	~Film();
 
     Film() = default;
     Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays pays,
@@ -27,12 +30,13 @@ public:
     void ajouterPaysRestreint(Pays pays);
     void supprimerPaysRestreints();
     bool estRestreintDansPays(Pays pays) const;
-    void afficher(std::ostream& stream) const;
 
     Genre getGenre() const;
     bool estRestreintParAge() const;
     const std::string& getNom() const;
     Auteur* getAuteur();
+
+	friend std::ostream& operator<<(std::ostream& os, const Film& film);
 
 private:
     // Attributs
@@ -43,9 +47,7 @@ private:
     bool estRestreintParAge_;
     Auteur* auteur_;
 
-    std::unique_ptr<Pays[]> paysRestreints_;
-    std::size_t nbPaysRestreints_;
-    std::size_t capacitePaysRestreints_;
+	std::vector<Pays> paysRestreints_;
 };
 
 #endif // FILM_H

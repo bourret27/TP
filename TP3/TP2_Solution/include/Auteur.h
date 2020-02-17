@@ -9,13 +9,15 @@ public:
     Auteur() = default;
     Auteur(const std::string& nom, unsigned int anneeDeNaissance);
 
-    void afficher(std::ostream& stream) const;
-
     const std::string& getNom() const;
     unsigned int getAnneeDeNaissance() const;
     unsigned int getNbFilms() const;
 
     void setNbFilms(unsigned int nbFilms);
+
+	bool operator==(const std::string& nom) const;
+	friend bool operator==(const std::string& nom, const Auteur& auteur);
+	friend std::ostream& operator<<(std::ostream& os, const Auteur& auteur);
 
 private:
     std::string nom_;
