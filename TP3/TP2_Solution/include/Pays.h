@@ -6,7 +6,7 @@
 
 enum class Pays
 {
-    first_ = -1,
+    
     Bresil = 0,
     Canada,
     Chine,
@@ -16,7 +16,8 @@ enum class Pays
     RoyaumeUni,
     Russie,
     Mexique,
-    last_
+	first_ = Bresil,
+    last_ = Mexique
 };
 
 #endif // PAYS_H
