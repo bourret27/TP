@@ -20,19 +20,29 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Auteur.cpp" />
+    <ClCompile Include="src\Episode.cpp" />
     <ClCompile Include="src\Film.cpp" />
     <ClCompile Include="src\GestionnaireAuteurs.cpp" />
+    <ClCompile Include="src\GestionnaireSaisons.cpp" />
     <ClCompile Include="src\Librairie.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Media.cpp" />
+    <ClCompile Include="src\Saison.cpp" />
+    <ClCompile Include="src\Serie.cpp" />
     <ClCompile Include="src\Utilisateur.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Auteur.h" />
     <ClInclude Include="include\debogageMemoire.h" />
+    <ClInclude Include="include\Episode.h" />
     <ClInclude Include="include\Film.h" />
     <ClInclude Include="include\GestionnaireAuteurs.h" />
+    <ClInclude Include="include\GestionnaireSaisons.h" />
     <ClInclude Include="include\Librairie.h" />
+    <ClInclude Include="include\Media.h" />
     <ClInclude Include="include\Pays.h" />
+    <ClInclude Include="include\Saison.h" />
+    <ClInclude Include="include\Serie.h" />
     <ClInclude Include="include\typesafe_enum.h" />
     <ClInclude Include="include\Utilisateur.h" />
   </ItemGroup>
