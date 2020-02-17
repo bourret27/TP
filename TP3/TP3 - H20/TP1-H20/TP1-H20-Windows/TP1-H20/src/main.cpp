@@ -5,7 +5,9 @@
 #include "Librairie.h"
 #include "Utilisateur.h"
 #include "debogageMemoire.h"
-
+#include "Episode.h"
+#include "Saison.h"
+#include "GestionnaireAuteurs.h"
 #include <algorithm>
 #include <cctype>
 #include <iomanip>
