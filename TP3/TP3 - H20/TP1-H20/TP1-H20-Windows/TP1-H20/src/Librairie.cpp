@@ -1,4 +1,6 @@
 #include "Librairie.h"
+#include "GestionnaireAuteurs.h"
+#include "GestionnaireSaisons.h"
 
 // To do
 Librairie::Librairie(const Librairie& librairie)
@@ -62,7 +64,7 @@ void Librairie::retirerEpisode(const std::string& nomSerie, unsigned int numSais
 //! auteur.
 //! \return                     Un bool représentant si le chargement a été un succès.
 bool Librairie::chargerMediasDepuisFichier(const std::string& nomFichier,
-                                           GestionnaireAuteurs& gestionnaireAuteurs)
+    GestionnaireAuteurs& gestionnaireAuteurs);
 {
     // To do
 }

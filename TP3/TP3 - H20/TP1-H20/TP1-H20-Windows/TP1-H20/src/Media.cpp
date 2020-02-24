@@ -42,96 +42,131 @@ namespace
 Media::Media(Auteur* auteur, Media::TypeMedia typeMedia)
 // To do
 {
+
 }
 
 // To do
 Media::Media(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays pays,
-             bool estRestreintParAge, Auteur* auteur, Media::TypeMedia typeMedia)
-    // To do
+             bool estRestreintParAge, Auteur* auteur, Media::TypeMedia typeMedia) :
+    nom_(nom),
+    anneeDeSortie_(anneeDeSortie),
+    genre_(genre),
+    pays_(pays),
+    estRestreintParAge_(estRestreintParAge),
+    auteur_(auteur),
+    typeMedia_(typeMedia)
 {
 }
 
 // To do
-Media::Media(const Media& serie)
+Media::Media(const Media& serie) : 
+    //Media(serie.nom_, serie.anneeDeSortie_, serie.genre_, serie.pays_, 
+    //    serie.estRestreintParAge_, serie.auteur_, serie.typeMedia_),
+    nom_(serie.nom_),
+    anneeDeSortie_(serie.anneeDeSortie_),
+    genre_(serie.genre_),
+    pays_(serie.pays_),
+    estRestreintParAge_(serie.estRestreintParAge_),
+    auteur_(serie.auteur_),
+    typeMedia_(serie.typeMedia_),
+    paysRestreints_(serie.paysRestreints_)
 {
-    // To do
+
 }
 
 
 // To do
 Media::~Media()
 {
-    // To do
+    // On ne fait rien de spécial
 }
 
 // To do
 void Media::ajouterPaysRestreint(Pays pays)
 {
-    // To do
+    paysRestreints_.push_back(pays);
 }
 
 // To do
 void Media::supprimerPaysRestreints()
 {
-    // To do
+    paysRestreints_.clear();
 }
 
 // To do
 bool Media::estRestreintDansPays(Pays pays) const
 {
-    // To do
+    for (std::size_t i = 0; i < paysRestreints_.size(); i++)
+    {
+        if (paysRestreints_[i] == pays)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 // To do
 bool Media::estRestreintParAge() const
 {
-    // To do
+    return estRestreintParAge_;
 }
 
 // To do
 std::ostream& Media::afficher(std::ostream& os) const
 {
-    // To do
+    os << nom_ << "\n\tDate de sortie: " << anneeDeSortie_
+        << "\n\tGenre: " << getGenreString(genre_) << "\n\tAuteur: " << auteur_->getNom()
+        << "\n\tPays: " << getPaysString(pays_)
+        << (paysRestreints_.size() == 0 ? "\n\tAucun pays restreint." : "\n\tPays restreints:");
+
+    for (std::size_t i = 0; i < paysRestreints_.size(); i++)
+    {
+        os << "\n\t\t" << getPaysString(paysRestreints_[i]);
+    }
+    os << '\n';
+
+    return os;
 }
 
 // To do
 std::ostream& operator<<(std::ostream& os, const Media& media)
 {
-    // To do
+    return media.afficher(os);
 }
 
 // To do
 Media::Genre Media::getGenre() const
 {
-    // To do
+    return genre_;
 }
 
 // To do
 const std::string& Media::getNom() const
 {
-    // To do
+    return nom_;
 }
 
 // To do
 Media::TypeMedia Media::getTypeMedia() const
 {
-    // To do
+    return typeMedia_;
 }
 
 // To do
 std::istream& Media::lire(std::istream& is)
 {
-    // To do
+
 }
 
 // To do
 std::istream& operator>>(std::istream& is, Media& media)
 {
-    // To do
+    return media.lire(is);
 }
 
 // To do
 std::unique_ptr<Media> Media::clone() const
 {
-    // To do
+    return std::make_unique<Media>(*this);
 }

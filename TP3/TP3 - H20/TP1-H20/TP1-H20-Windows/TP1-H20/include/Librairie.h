@@ -2,6 +2,10 @@
 #define Librairie_H
 
 #include <functional>
+#include "Film.h"
+#include "Serie.h"
+#include "Media.h"
+#include "Episode.h"
 // To do
 
 class Librairie
