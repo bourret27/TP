@@ -27,8 +27,12 @@ GestionnaireSaisons& GestionnaireSaisons::operator-=(const unsigned int numSaiso
 {
     // To do
     size_t indexSaison = trouverIndexSaison(numSaison);
-    saisons_.erase(saisons_.begin() + indexSaison);
-    sort(saisons_.begin(), saisons_.end(), Saison::SortByNumSaison());
+    if (indexSaison >= -1)
+    {
+        saisons_.erase(saisons_.begin() + indexSaison);
+        sort(saisons_.begin(), saisons_.end(), Saison::SortByNumSaison());
+    }
+    
     return *this;
 }
 
@@ -37,7 +41,11 @@ void GestionnaireSaisons::ajouterEpisode(const unsigned int numSaison,
                                          std::unique_ptr<Episode> episode)
 {
     // To do
-    size_t indexEpisode = trouverIndexSaison(numSaison);
+    size_t indexSaison = trouverIndexSaison(numSaison);
+    if (indexSaison >= -1)
+    {
+        *(saisons_[indexSaison]) += move(episode);
+    }
     
 }
 
@@ -46,6 +54,12 @@ void GestionnaireSaisons::retirerEpisode(const unsigned int numSaison,
                                          const unsigned int numEpisode)
 {
     // To do
+    size_t indexSaison = trouverIndexSaison(numSaison);
+    if (indexSaison >= -1)
+    {
+        *(saisons_[indexSaison]) -= numEpisode;
+    }
+    
 }
 
 /// To do
@@ -67,12 +81,19 @@ size_t GestionnaireSaisons::trouverIndexSaison(const unsigned int numSaison) con
 
 // To do
 Saison* GestionnaireSaisons::getSaison(const unsigned int numSaison) const
-{
+{ 
     // To do
+    size_t indexSaison = trouverIndexSaison(numSaison);
+    if (indexSaison > -1)
+    {
+        return new Saison(*saisons_[indexSaison]);
+    }
+    return nullptr;
 }
 
 // To do
 size_t GestionnaireSaisons::getNbSaisons() const
 {
     // To do
+    return saisons_.size();
 }

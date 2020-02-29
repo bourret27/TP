@@ -49,7 +49,10 @@ Saison& Saison::operator-=(unsigned int numEpisode)
 {
     // To do
     size_t indexEpisode = trouverIndexEpisode(numEpisode);
-    episodes_.erase(episodes_.begin() + indexEpisode);
+    if (indexEpisode >= -1)
+    {
+        episodes_.erase(episodes_.begin() + indexEpisode);
+    }
     sort(episodes_.begin(), episodes_.end(), Episode::SortByNumEpisode());
     return *this;
 }
