@@ -2,7 +2,8 @@
 #define Serie_1_H
 
 #include <iomanip>
-// To do
+#include "Media.h"
+#include "GestionnaireSaisons.h"
 
 class Serie
     : public Media

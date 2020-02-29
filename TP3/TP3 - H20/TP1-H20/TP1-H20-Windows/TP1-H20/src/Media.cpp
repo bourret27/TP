@@ -39,7 +39,14 @@ namespace
 } // namespace
 
 // To do
-Media::Media(Auteur* auteur, Media::TypeMedia typeMedia)
+Media::Media(Auteur* auteur, Media::TypeMedia typeMedia) :
+    nom_("NomMedia"),
+    anneeDeSortie_(0),
+    genre_(Genre::first_),
+    pays_(Pays::first_),
+    estRestreintParAge_(false),
+    auteur_(auteur),
+    typeMedia_(typeMedia)
 // To do
 {
 
@@ -156,7 +163,15 @@ Media::TypeMedia Media::getTypeMedia() const
 // To do
 std::istream& Media::lire(std::istream& is)
 {
-
+    int typeMediaValeurEnum = 0;
+    int genreValeurEnum = 0;
+    int paysValeurEnum = 0;
+    is >> typeMediaValeurEnum >> *auteur_ >> std::quoted(nom_) >> anneeDeSortie_ 
+        >> genreValeurEnum >> paysValeurEnum >> estRestreintParAge_;
+    typeMedia_ = to_enum<TypeMedia>(typeMediaValeurEnum);
+    genre_ = to_enum<Genre>(genreValeurEnum);
+    pays_ = to_enum<Pays>(paysValeurEnum);
+    return is;
 }
 
 // To do

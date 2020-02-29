@@ -75,7 +75,7 @@ protected:
     Pays pays_;
     bool estRestreintParAge_;
     Auteur* auteur_;
-    Media::TypeMedia typeMedia_;
+    TypeMedia typeMedia_;
     std::vector<Pays> paysRestreints_;
 };
 #endif // MEDIA_H

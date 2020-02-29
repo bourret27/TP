@@ -3,7 +3,9 @@
 #include "Film.h"
 
 // To do
-Film::Film(Auteur* auteur)
+Film::Film(Auteur* auteur) :
+    Media(auteur, TypeMedia::Film),
+    duree_("00:00:00")
 // To do
 {
 }
@@ -29,11 +31,14 @@ std::ostream& Film::afficher(std::ostream& os) const
 // To do
 std::istream& Film::lire(std::istream& is)
 {
-    // To do
+    Media::lire(is);
+    is >> duree_;
+    return is;
+
 }
 
 // To do
 std::unique_ptr<Media> Film::clone() const
 {
-    return std::make_unique<Media>(*this);
+    return Media::clone();
 }

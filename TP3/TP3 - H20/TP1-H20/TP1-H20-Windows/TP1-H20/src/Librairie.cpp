@@ -4,8 +4,11 @@
 
 // To do
 Librairie::Librairie(const Librairie& librairie)
-{
-    // To do
+{/*
+    for (std::size_t i = 0; i < librairie.getNbMedias(); i++)
+    {
+        medias_.push_back(librairie.getMedias)
+    }*/
 }
 
 // To do
@@ -23,7 +26,7 @@ Librairie::~Librairie()
 // To do
 Film* Librairie::chercherFilm(const std::string& nomFilm)
 {
-    // To do
+
 }
 
 // To do
@@ -95,37 +98,58 @@ bool Librairie::chargerRestrictionsDepuisFichiers(const std::string& nomFichier)
 // To do
 size_t Librairie::getNbMedias() const
 {
-    // To do
+    return medias_.size();
 }
 
 // To do
 std::ostream& operator<<(std::ostream& os, const Librairie& librairie)
 {
-    // To do
+    for (std::size_t i = 0; i < librairie.medias_.size(); i++)
+    {
+        os << librairie.medias_[i];
+    }
+    return os;
 }
 
 // To do
 size_t Librairie::trouverIndexMedia(const std::string& nomMedia) const
 {
-    // To do
+    std::size_t indexMedia = MEDIA_INEXSISTANT;
+    for (std::size_t i = 0; i < medias_.size() && indexMedia == MEDIA_INEXSISTANT; i++)
+    {
+        if (medias_[i]->getNom() == nomMedia)
+            indexMedia = i;
+    }
+    return indexMedia;
 }
 
 // To do
 Librairie& Librairie::operator+=(std::unique_ptr<Media> media)
 {
-    // To do
+    medias_.push_back(media);
 }
 
 // To do
 Librairie& Librairie::operator-=(const std::string& nomMedia)
 {
-    // To do
+    int indexMedia = trouverIndexMedia(nomMedia);
+    medias_.erase(medias_.begin() + indexMedia);
 }
 
 // To do
 Media* Librairie::chercherMedia(const std::string& nomMedia, Media::TypeMedia typeMedia)
 {
-    // To do
+    Media* ptrMedia = nullptr;
+    std::size_t indexMedia = trouverIndexMedia(nomMedia);
+    for (std::size_t i = indexMedia; i < getNbMedias() && ptrMedia == nullptr; i++)
+    {
+        if (medias_[i]->getTypeMedia == typeMedia)
+        {
+            ptrMedia = medias_[i].get();
+        }
+    }
+    return ptrMedia;
+
 }
 
 // To do
@@ -153,17 +177,17 @@ bool Librairie::lireLigneMedia(const std::string& ligne, GestionnaireAuteurs& ge
 // To do
 const std::vector<std::unique_ptr<Media>>& Librairie::getMedias() const
 {
-    // To do
+    return medias_;
 }
 
 // To do
-bool Librairie::lireLigneEpisode(std::istream& is, GestionnaireAuteurs&)
+bool Librairie::lireLigneEpisode(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs)
 {
     // To do
 }
 
 // To do
-bool Librairie::lireLigneSaison(std::istream& is, GestionnaireAuteurs&)
+bool Librairie::lireLigneSaison(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs)
 {
     // To do
 }
@@ -183,23 +207,37 @@ bool Librairie::lireLigneFilm(std::istream& is, GestionnaireAuteurs& gestionnair
 // To do
 size_t Librairie::getNbFilms() const
 {
-    // To do
+    std::size_t nbFilms = 0;
+    for (std::size_t i = 0; i < getNbMedias(); i++)
+    {
+        if (medias_[i]->getTypeMedia() == Media::TypeMedia::Film)
+            nbFilms++;
+    }
+    return nbFilms;
 }
 
 // To do
 size_t Librairie::getNbSeries() const
 {
-    // To do
+    std::size_t nbSeries = 0;
+    for (std::size_t i = 0; i < getNbMedias(); i++)
+    {
+        if (medias_[i]->getTypeMedia() == Media::TypeMedia::Film)
+            nbSeries++;
+    }
+    return nbSeries;
 }
 
 // To do
 size_t Librairie::getNbSaisons(const std::string& nomSerie) const
 {
-    // To do
+    Serie* ptrSerie = chercherSerie(nomSerie);
+    std::size_t nbSaisons = 0;
+    for ()
 }
 
 // To do
 size_t Librairie::getNbEpisodes(const std::string& nomSerie, const unsigned int numSaison) const
 {
-    // To do
+
 }
