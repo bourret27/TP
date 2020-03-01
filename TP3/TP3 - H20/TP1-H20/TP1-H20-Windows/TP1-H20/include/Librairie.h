@@ -6,6 +6,7 @@
 #include "Serie.h"
 #include "Media.h"
 #include "Episode.h"
+#include "GestionnaireAuteurs.h"
 // To do
 
 class Librairie
@@ -50,8 +51,8 @@ protected:
 
     bool lireLigneRestrictions(const std::string& ligne);
     bool lireLigneMedia(const std::string& ligne, GestionnaireAuteurs& gestionnaireAuteurs);
-    bool lireLigneEpisode(std::istream& is, GestionnaireAuteurs&);
-    bool lireLigneSaison(std::istream& is, GestionnaireAuteurs&);
+    bool lireLigneEpisode(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs);
+    bool lireLigneSaison(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs);
     bool lireLigneSerie(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs);
     bool lireLigneFilm(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs);
 

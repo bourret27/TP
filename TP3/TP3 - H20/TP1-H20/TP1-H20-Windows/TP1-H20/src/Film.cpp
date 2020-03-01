@@ -41,5 +41,5 @@ std::istream& Film::lire(std::istream& is)
 // To do
 std::unique_ptr<Media> Film::clone() const
 {
-    return Media::clone();
+    return std::move(std::make_unique<Film>(*this));
 }

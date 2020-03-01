@@ -4,17 +4,24 @@
 
 // To do
 Librairie::Librairie(const Librairie& librairie)
-{/*
+{
     for (std::size_t i = 0; i < librairie.getNbMedias(); i++)
     {
-        medias_.push_back(librairie.getMedias)
-    }*/
+		medias_.push_back(std::move(librairie.getMedias()[i]->clone()));
+    }
 }
 
 // To do
 Librairie& Librairie::operator=(const Librairie& librairie)
 {
-    // To do
+	if (&librairie == this)
+		return *this;
+	medias_.clear();
+	for (std::size_t i = 0; i < librairie.getNbMedias(); i++)
+	{
+		medias_.push_back(std::move(librairie.getMedias()[i]->clone()));
+	}
+	return *this;
 }
 
 //! Destructeur de la classe Librairie
@@ -26,39 +33,45 @@ Librairie::~Librairie()
 // To do
 Film* Librairie::chercherFilm(const std::string& nomFilm)
 {
-
+	Media* film = chercherMedia(nomFilm, Media::TypeMedia::Film);
+	return dynamic_cast<Film*>(film);
 }
 
 // To do
 Serie* Librairie::chercherSerie(const std::string& nomSerie)
 {
-    // To do
+	Media* serie = chercherMedia(nomSerie, Media::TypeMedia::Serie);
+	return dynamic_cast<Serie*>(serie);
 }
 
 // To do
 void Librairie::ajouterSaison(const std::string& nomSerie, std::unique_ptr<Saison> saison)
 {
-    // To do
+	Serie* serie = chercherSerie(nomSerie);
+	*serie += std::move(saison);
 }
 
 // To do
 void Librairie::retirerSaison(const std::string& nomSerie, unsigned int numSaison)
 {
-    // To do
+	Serie* serie = chercherSerie(nomSerie);
+	*serie -= numSaison;
 }
 
 // To do
 void Librairie::ajouterEpisode(const std::string& nomSerie, unsigned int numSaison,
                                std::unique_ptr<Episode> episode)
 {
-    // To do
+	Serie* serie = chercherSerie(nomSerie);
+	serie->ajouterEpisode(numSaison, std::move(episode));
 }
 
 
 void Librairie::retirerEpisode(const std::string& nomSerie, unsigned int numSaison,
                                unsigned int numEpisode)
 {
-    // To do
+	Serie* serie = chercherSerie(nomSerie);
+	serie->retirerEpisode(numSaison, numEpisode);
 }
 
 //! Méthode qui charge les series à partir d'un fichier.
@@ -67,9 +80,27 @@ void Librairie::retirerEpisode(const std::string& nomSerie, unsigned int numSais
 //! auteur.
 //! \return                     Un bool représentant si le chargement a été un succès.
 bool Librairie::chargerMediasDepuisFichier(const std::string& nomFichier,
-    GestionnaireAuteurs& gestionnaireAuteurs);
+    GestionnaireAuteurs& gestionnaireAuteurs)
 {
-    // To do
+	std::ifstream fichier(nomFichier);
+	if (fichier)
+	{
+		// Supprimer les vieux medias avant de lire les nouveaux
+		medias_.clear();
+
+		std::string ligne;
+		while (std::getline(fichier, ligne))
+		{
+			if (lireLigneMedia(ligne, gestionnaireAuteurs) == false)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	std::cerr << "Le fichier " << nomFichier
+		<< " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
+	return false;
 }
 
 //! Méthode qui charge les restrictions des series à partir d'un fichier.
@@ -126,7 +157,8 @@ size_t Librairie::trouverIndexMedia(const std::string& nomMedia) const
 // To do
 Librairie& Librairie::operator+=(std::unique_ptr<Media> media)
 {
-    medias_.push_back(media);
+    medias_.push_back(std::move(media));
+	return *this;
 }
 
 // To do
@@ -134,6 +166,7 @@ Librairie& Librairie::operator-=(const std::string& nomMedia)
 {
     int indexMedia = trouverIndexMedia(nomMedia);
     medias_.erase(medias_.begin() + indexMedia);
+	return *this;
 }
 
 // To do
@@ -143,7 +176,7 @@ Media* Librairie::chercherMedia(const std::string& nomMedia, Media::TypeMedia ty
     std::size_t indexMedia = trouverIndexMedia(nomMedia);
     for (std::size_t i = indexMedia; i < getNbMedias() && ptrMedia == nullptr; i++)
     {
-        if (medias_[i]->getTypeMedia == typeMedia)
+        if (medias_[i]->getTypeMedia() == typeMedia)
         {
             ptrMedia = medias_[i].get();
         }
@@ -155,7 +188,28 @@ Media* Librairie::chercherMedia(const std::string& nomMedia, Media::TypeMedia ty
 // To do
 bool Librairie::lireLigneRestrictions(const std::string& ligne)
 {
-    // To do
+	std::istringstream stream(ligne);
+	int typeMedia;
+	std::string nomMedia;
+	// Pour extraire tout ce qui se trouve entre "" dans un stream,
+	// il faut faire stream >> std::quoted(variable)
+	if (stream >> typeMedia >> std::quoted(nomMedia))
+	{
+		Media* media = chercherMedia(nomMedia, to_enum<Media::TypeMedia>(typeMedia));
+		if (media == nullptr)
+		{
+			// Media n'existe pas
+			return false;
+		}
+
+		int paysValeurEnum;
+		while (stream >> paysValeurEnum)
+		{
+			media->ajouterPaysRestreint(to_enum<Pays>(paysValeurEnum));
+		}
+		return true;
+	}
+	return false;
 }
 
 // To do
@@ -183,25 +237,87 @@ const std::vector<std::unique_ptr<Media>>& Librairie::getMedias() const
 // To do
 bool Librairie::lireLigneEpisode(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs)
 {
-    // To do
+	std::string nomSerie;
+	int numSaison = 0;
+	Episode episode;
+	if (is >> episode >> std::quoted(nomSerie) >> numSaison)
+	{
+		ajouterEpisode(nomSerie, numSaison, std::move(std::make_unique<Episode>(episode)));
+		return true;
+	}
+	return false;
 }
 
 // To do
 bool Librairie::lireLigneSaison(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs)
 {
-    // To do
+	std::string nomSerie;
+	Saison saison;
+	if (is >> saison >> std::quoted(nomSerie))
+	{
+		ajouterSaison(nomSerie, std::move(std::make_unique<Saison>(saison)));
+		return true;
+	}
+	return false;
 }
 
 // To do
 bool Librairie::lireLigneSerie(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs)
 {
-    // To do
+	std::string nomAuteur = "";
+	if (is >> std::quoted(nomAuteur))
+	{
+		Auteur* auteur = gestionnaireAuteurs.chercherAuteur(nomAuteur);
+		if (auteur == nullptr)
+			return false;
+		Serie serie(auteur);
+		is >> serie;
+		auteur->setNbMedias(auteur->getNbMedias() + 1);
+		*this += std::move(serie.clone());
+		return true;
+	}/*
+	if (is >> serie)
+	{
+		Auteur* auteur = gestionnaireAuteurs.chercherAuteur(serie.getAuteur()->getNom());
+		if (auteur == nullptr)
+		{
+			return false;
+		}
+		auteur->setNbMedias(auteur->getNbMedias() + 1);
+		*this += std::move(serie.clone());
+		return true;
+	}*/
+	return false;
 }
 
 // To do
 bool Librairie::lireLigneFilm(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs)
 {
-    // To do
+	std::string nomAuteur = "";
+	if (is >> std::quoted(nomAuteur))
+	{
+		Auteur* auteur = gestionnaireAuteurs.chercherAuteur(nomAuteur);
+		if (auteur == nullptr)
+			return false;
+		Film film(auteur);
+		is >> film;
+		auteur->setNbMedias(auteur->getNbMedias() + 1);
+		*this += std::move(film.clone());
+		return true;
+	}
+	/*Film film(nullptr);
+	if (is >> film)
+	{
+		Auteur* auteur = gestionnaireAuteurs.chercherAuteur(film.getAuteur()->getNom());
+		if (auteur == nullptr)
+		{
+			return false;
+		}
+		auteur->setNbMedias(auteur->getNbMedias() + 1);
+		*this += std::move(film.clone());
+		return true;
+	}*/
+	return false;
 }
 
 // To do
@@ -222,7 +338,7 @@ size_t Librairie::getNbSeries() const
     std::size_t nbSeries = 0;
     for (std::size_t i = 0; i < getNbMedias(); i++)
     {
-        if (medias_[i]->getTypeMedia() == Media::TypeMedia::Film)
+        if (medias_[i]->getTypeMedia() == Media::TypeMedia::Serie)
             nbSeries++;
     }
     return nbSeries;
@@ -231,13 +347,18 @@ size_t Librairie::getNbSeries() const
 // To do
 size_t Librairie::getNbSaisons(const std::string& nomSerie) const
 {
-    Serie* ptrSerie = chercherSerie(nomSerie);
-    std::size_t nbSaisons = 0;
-    for ()
+	std::size_t indexSerie = trouverIndexMedia(nomSerie);
+	Serie* ptrSerie = dynamic_cast<Serie*>(medias_[indexSerie].get());
+    //Serie* ptrSerie = chercherSerie(nomSerie);
+	return ptrSerie->getNbSaisons();
 }
 
 // To do
 size_t Librairie::getNbEpisodes(const std::string& nomSerie, const unsigned int numSaison) const
 {
-
+	std::size_t indexSerie = trouverIndexMedia(nomSerie);
+	Serie* ptrSerie = dynamic_cast<Serie*>(medias_[indexSerie].get());
+	Saison* ptrSaison = ptrSerie->getSaison(numSaison);
+	//Serie* ptrSerie = chercherSerie(nomSerie);
+	return ptrSaison->getNbEpisodes();
 }

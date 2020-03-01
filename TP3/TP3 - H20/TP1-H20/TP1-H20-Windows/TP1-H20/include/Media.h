@@ -64,6 +64,7 @@ public:
     Genre getGenre() const;
     const std::string& getNom() const;
     Media::TypeMedia getTypeMedia() const;
+	Auteur* getAuteur() const;
 
     virtual std::unique_ptr<Media> clone() const;
 

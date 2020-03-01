@@ -66,17 +66,17 @@ Media::Media(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pa
 }
 
 // To do
-Media::Media(const Media& serie) : 
+Media::Media(const Media& media) : 
     //Media(serie.nom_, serie.anneeDeSortie_, serie.genre_, serie.pays_, 
     //    serie.estRestreintParAge_, serie.auteur_, serie.typeMedia_),
-    nom_(serie.nom_),
-    anneeDeSortie_(serie.anneeDeSortie_),
-    genre_(serie.genre_),
-    pays_(serie.pays_),
-    estRestreintParAge_(serie.estRestreintParAge_),
-    auteur_(serie.auteur_),
-    typeMedia_(serie.typeMedia_),
-    paysRestreints_(serie.paysRestreints_)
+    nom_(media.nom_),
+    anneeDeSortie_(media.anneeDeSortie_),
+    genre_(media.genre_),
+    pays_(media.pays_),
+    estRestreintParAge_(media.estRestreintParAge_),
+    auteur_(media.auteur_),
+    typeMedia_(media.typeMedia_),
+    paysRestreints_(media.paysRestreints_)
 {
 
 }
@@ -85,7 +85,7 @@ Media::Media(const Media& serie) :
 // To do
 Media::~Media()
 {
-    // On ne fait rien de spécial
+	supprimerPaysRestreints();
 }
 
 // To do
@@ -160,15 +160,20 @@ Media::TypeMedia Media::getTypeMedia() const
     return typeMedia_;
 }
 
+Auteur* Media::getAuteur() const
+{
+	return auteur_;
+}
+
 // To do
 std::istream& Media::lire(std::istream& is)
 {
-    int typeMediaValeurEnum = 0;
+    //int typeMediaValeurEnum = 0;
     int genreValeurEnum = 0;
     int paysValeurEnum = 0;
-    is >> typeMediaValeurEnum >> *auteur_ >> std::quoted(nom_) >> anneeDeSortie_ 
+    is >> /*typeMediaValeurEnum >> *auteur_ >> */ std::quoted(nom_) >> anneeDeSortie_ 
         >> genreValeurEnum >> paysValeurEnum >> estRestreintParAge_;
-    typeMedia_ = to_enum<TypeMedia>(typeMediaValeurEnum);
+    //typeMedia_ = to_enum<TypeMedia>(typeMediaValeurEnum);
     genre_ = to_enum<Genre>(genreValeurEnum);
     pays_ = to_enum<Pays>(paysValeurEnum);
     return is;
@@ -183,5 +188,5 @@ std::istream& operator>>(std::istream& is, Media& media)
 // To do
 std::unique_ptr<Media> Media::clone() const
 {
-    return std::make_unique<Media>(*this);
+    return std::move(std::make_unique<Media>(*this));
 }
