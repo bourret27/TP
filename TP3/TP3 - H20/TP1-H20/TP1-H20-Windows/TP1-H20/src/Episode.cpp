@@ -32,7 +32,7 @@ std::ostream& operator<<(std::ostream& os, const Episode& episode)
 		os << "0";
 	}
 	os << episode.numEpisode_;
-    os << ':' << episode.nom_ << '|' << "Duree:" << episode.duree_;
+    os << ':' << episode.nom_ << '|' << "Durée:" << episode.duree_;
     return os;
     
 }

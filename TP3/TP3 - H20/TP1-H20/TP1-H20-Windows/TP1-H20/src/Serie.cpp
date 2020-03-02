@@ -33,7 +33,7 @@ std::ostream& Serie::afficher(std::ostream& os) const
     Media::afficher(os);
 	for (std::size_t i = 0; i < getNbSaisons(); i++)
 	{
-		os << saisons_[i];
+		os << *saisons_[i];
 	}
     return os;
 }
