@@ -49,10 +49,8 @@ Saison& Saison::operator-=(unsigned int numEpisode)
 {
     // To do
     size_t indexEpisode = trouverIndexEpisode(numEpisode);
-    if (indexEpisode >= -1)
-    {
+    if (indexEpisode > -1)
         episodes_.erase(episodes_.begin() + indexEpisode);
-    }
     sort(episodes_.begin(), episodes_.end(), Episode::SortByNumEpisode());
     return *this;
 }
@@ -68,12 +66,17 @@ bool Saison::operator==(unsigned int numSaison)
 std::ostream& operator<<(std::ostream& os, const Saison& saison)
 {
     // To do
-    os << "Saison" << saison.numSaison_ << " " << ':' << " " << saison.episodes_.size() << '/' << saison.nbEpisodesmax_;
+    os << "\t" << "Saison "; 
+    if (saison.numSaison_ < 10)
+    {
+        os << "0";
+    }
+    os << saison.numSaison_ << " " << ':' << " " << saison.episodes_.size() << '/' << saison.nbEpisodesmax_;
     if (saison.episodes_.size() != saison.nbEpisodesmax_)
         os << "(En cours)";
     os << std::endl;
     for (unsigned i = 0; i < saison.episodes_.size(); ++i)
-        os << *saison.episodes_[i];
+        os << *saison.episodes_[i] << std::endl;
     return os;
     
 }
