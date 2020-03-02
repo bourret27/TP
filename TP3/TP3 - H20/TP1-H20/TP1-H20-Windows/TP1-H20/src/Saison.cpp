@@ -14,12 +14,11 @@ Saison::Saison(unsigned int numSaison, unsigned int nbEpisodemax) : numSaison_(n
 
 // To do
 Saison::Saison(const Saison& saison) : numSaison_(saison.numSaison_), nbEpisodesmax_(saison.nbEpisodesmax_)
-
 {
     // To do
     for (unsigned i = 0; i < saison.episodes_.size(); ++i)
     {
-        episodes_.push_back(std::make_unique<Episode>(*saison.episodes_[i]));
+        episodes_.push_back(std::make_unique<Episode>(*episodes_[i]));
     }
 }
 
@@ -34,25 +33,25 @@ Saison::~Saison()
 Saison& Saison::operator+=(std::unique_ptr<Episode> episode)
 {
     // To do
-    size_t indexEpisode = trouverIndexEpisode(episode->getNumEpisode());
-    if (indexEpisode > -1)
+    const size_t INDEX_NON_TROUVE = -1;
+    if (trouverIndexEpisode(episode->getNumEpisode()) > INDEX_NON_TROUVE)
     {
-        episodes_.erase(episodes_.begin() + indexEpisode);
+        episodes_.erase(episodes_.begin() + trouverIndexEpisode(episode->getNumEpisode()));
     }
     episodes_.push_back(std::move(episode));
-    sort(episodes_.begin(), episodes_.end(), Episode::SortByNumEpisode());
-    return *this;
+    std::sort(episodes_.begin(), episodes_.end(), Episode::SortByNumEpisode());
+    return (*this);
 }
 
 // To do
 Saison& Saison::operator-=(unsigned int numEpisode)
 {
     // To do
+    const size_t INDEX_NON_TROUVE = -1;
     size_t indexEpisode = trouverIndexEpisode(numEpisode);
-    if (indexEpisode > -1)
+    if (indexEpisode > INDEX_NON_TROUVE)
         episodes_.erase(episodes_.begin() + indexEpisode);
-    sort(episodes_.begin(), episodes_.end(), Episode::SortByNumEpisode());
-    return *this;
+    return (*this);
 }
 
 // To do
@@ -106,13 +105,14 @@ size_t Saison::getNbEpisodes() const
 // To do
 size_t Saison::trouverIndexEpisode(unsigned int numEpisode)
 {
+    const size_t INDEX_NON_TROUVE = -1;
     // To do
-    for (unsigned i = 0; i < episodes_.size(); ++i)
+    for (size_t i = 0; i < episodes_.size(); i++)
     {
-        if (*episodes_[i] == numEpisode)
+        if (*(episodes_[i]) == numEpisode)
         {
             return i;
         }
     }
-    return -1;
+    return INDEX_NON_TROUVE;
 }
