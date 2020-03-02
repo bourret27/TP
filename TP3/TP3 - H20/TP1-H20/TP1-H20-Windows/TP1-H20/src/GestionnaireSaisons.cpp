@@ -30,7 +30,6 @@ GestionnaireSaisons& GestionnaireSaisons::operator-=(const unsigned int numSaiso
     if (indexSaison > -1)
     {
         saisons_.erase(saisons_.begin() + indexSaison);
-        sort(saisons_.begin(), saisons_.end(), Saison::SortByNumSaison());
     }
     
     return *this;
