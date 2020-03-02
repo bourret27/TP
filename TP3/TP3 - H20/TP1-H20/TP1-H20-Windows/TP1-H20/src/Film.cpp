@@ -24,7 +24,7 @@ Film::Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays
 std::ostream& Film::afficher(std::ostream& os) const
 {
     Media::afficher(os);
-    os << "\tDurÃ©e: " << duree_ << "\n";
+    os << "\tDurée: " << duree_ << "\n";
     return os;
     // To do
 }
