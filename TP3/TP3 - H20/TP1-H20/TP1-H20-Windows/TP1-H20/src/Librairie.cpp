@@ -48,14 +48,16 @@ Serie* Librairie::chercherSerie(const std::string& nomSerie)
 void Librairie::ajouterSaison(const std::string& nomSerie, std::unique_ptr<Saison> saison)
 {
 	Serie* serie = chercherSerie(nomSerie);
-	*serie += std::move(saison);
+	if (serie != nullptr)
+		*serie += std::move(saison);
 }
 
 // To do
 void Librairie::retirerSaison(const std::string& nomSerie, unsigned int numSaison)
 {
 	Serie* serie = chercherSerie(nomSerie);
-	*serie -= numSaison;
+	if (serie != nullptr)
+		*serie -= numSaison;
 }
 
 // To do
@@ -63,7 +65,8 @@ void Librairie::ajouterEpisode(const std::string& nomSerie, unsigned int numSais
                                std::unique_ptr<Episode> episode)
 {
 	Serie* serie = chercherSerie(nomSerie);
-	serie->ajouterEpisode(numSaison, std::move(episode));
+	if (serie != nullptr)
+		serie->ajouterEpisode(numSaison, std::move(episode));
 }
 
 
@@ -71,7 +74,8 @@ void Librairie::retirerEpisode(const std::string& nomSerie, unsigned int numSais
                                unsigned int numEpisode)
 {
 	Serie* serie = chercherSerie(nomSerie);
-	serie->retirerEpisode(numSaison, numEpisode);
+	if (serie != nullptr)
+		serie->retirerEpisode(numSaison, numEpisode);
 }
 
 //! Méthode qui charge les series à partir d'un fichier.
@@ -166,7 +170,8 @@ Librairie& Librairie::operator+=(std::unique_ptr<Media> media)
 Librairie& Librairie::operator-=(const std::string& nomMedia)
 {
     int indexMedia = trouverIndexMedia(nomMedia);
-    medias_.erase(medias_.begin() + indexMedia);
+	if (indexMedia > -1)
+		medias_.erase(medias_.begin() + indexMedia);
 	return *this;
 }
 
@@ -349,17 +354,25 @@ size_t Librairie::getNbSeries() const
 size_t Librairie::getNbSaisons(const std::string& nomSerie) const
 {
 	std::size_t indexSerie = trouverIndexMedia(nomSerie);
-	Serie* ptrSerie = dynamic_cast<Serie*>(medias_[indexSerie].get());
-    //Serie* ptrSerie = chercherSerie(nomSerie);
-	return ptrSerie->getNbSaisons();
+	if (indexSerie > -1)
+	{
+		Serie* ptrSerie = dynamic_cast<Serie*>(medias_[indexSerie].get());
+		//Serie* ptrSerie = chercherSerie(nomSerie);
+		return ptrSerie->getNbSaisons();
+	}
+	return 0;
 }
 
 // To do
 size_t Librairie::getNbEpisodes(const std::string& nomSerie, const unsigned int numSaison) const
 {
 	std::size_t indexSerie = trouverIndexMedia(nomSerie);
-	Serie* ptrSerie = dynamic_cast<Serie*>(medias_[indexSerie].get());
-	Saison* ptrSaison = ptrSerie->getSaison(numSaison);
-	//Serie* ptrSerie = chercherSerie(nomSerie);
-	return ptrSaison->getNbEpisodes();
+	if (indexSerie > -1)
+	{
+		Serie* ptrSerie = dynamic_cast<Serie*>(medias_[indexSerie].get());
+		Saison* ptrSaison = ptrSerie->getSaison(numSaison);
+		//Serie* ptrSerie = chercherSerie(nomSerie);
+		return ptrSaison->getNbEpisodes();
+	}
+	return 0;
 }
