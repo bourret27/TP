@@ -35,7 +35,7 @@ int main()
 
     std::vector<bool> tests;
 
-#if false
+#if true
     // Test 1: classe Episode
     Episode episode_01;
     std::string episodeLigne = "1\"Episode:01\"\"00:00:00\"";
@@ -60,7 +60,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 2: classe Saison
     Saison saison_01;
     std::string saisonLigne = "1 20";
@@ -211,7 +211,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 6 et 7: Lecture des fichiers et affichage.
     // Assurez-vous de mettre les fichiers à la bonne place pour que
     // le programme puisse les trouver.
@@ -331,7 +331,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 8: operateur d'ajout d'auteurs
     bool test3Reussi = true;
     // Remplir le tableau des auteurs
@@ -356,7 +356,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 9: Fonction recherche d'auteurs
     const Auteur* auteurTest = gestionnaireAuteurs.chercherAuteur("George Lucas");
     const Auteur* auteurInexsistant = gestionnaireAuteurs.chercherAuteur("qwerty");
@@ -368,7 +368,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 10: Ajouter des films
     size_t nbFilmsAvantTest10 = librairie.getNbMedias();
     static constexpr unsigned int test10NbFilmsAjouter = 200;
@@ -397,7 +397,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 11: Supprimer des films
     // On supprime tous les films ajoutés au test 8
     size_t nbFilmsAvantTest11 = librairie.getNbMedias();
@@ -414,7 +414,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 12: Recherche film
     Film* raidersOfTheLostArk = (librairie.chercherFilm("Raiders of the Lost Ark"));
     tests.push_back(raidersOfTheLostArk != nullptr &&
@@ -425,7 +425,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 13: Ajouter des Series
     size_t nbFilmsAvantTest13 = librairie.getNbMedias();
     static constexpr unsigned int test13NbSeriesAjouter = 200;
@@ -452,7 +452,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 14: Supprimer des Series
     // On supprime toutes les Series ajoutés au test 14
     size_t nbFilmsAvantTest14 = librairie.getNbMedias();
@@ -469,7 +469,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 15: Recherche Serie
     Serie* gameofThrones = (librairie.chercherSerie("Game of Thrones"));
     tests.push_back(gameofThrones != nullptr && gameofThrones->getGenre() == Serie::Genre::Action &&
@@ -479,7 +479,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 16: Ajouter/retiser Episode/Saison
     bool test_1 = librairie.getNbSaisons("Game of Thrones") == 2;
     librairie.ajouterSaison("Game of Thrones", std::make_unique<Saison>(3, 20));
@@ -511,7 +511,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 17: Utilisateur non premium limite de films
     Auteur auteur("Test", 23);
     Film film("film1", 1990, Film::Genre::Comedie, Pays::Mexique, false, &auteur, "20:00");
@@ -548,7 +548,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
 
     // test 20 constructeur de copie de librairie et operateur=
     librairie += std::make_unique<Film>("tes2t",
