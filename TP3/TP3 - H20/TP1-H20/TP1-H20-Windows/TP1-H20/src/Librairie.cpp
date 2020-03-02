@@ -157,7 +157,8 @@ size_t Librairie::trouverIndexMedia(const std::string& nomMedia) const
 // To do
 Librairie& Librairie::operator+=(std::unique_ptr<Media> media)
 {
-    medias_.push_back(std::move(media));
+	if (media != nullptr)
+		medias_.push_back(std::move(media));
 	return *this;
 }
 
