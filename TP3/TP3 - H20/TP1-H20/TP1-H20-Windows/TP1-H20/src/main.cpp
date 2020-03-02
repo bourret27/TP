@@ -35,7 +35,7 @@ int main()
 
     std::vector<bool> tests;
 
-#if false
+#if true
     // Test 1: classe Episode
     Episode episode_01;
     std::string episodeLigne = "1\"Episode:01\"\"00:00:00\"";
@@ -60,7 +60,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 2: classe Saison
     Saison saison_01;
     std::string saisonLigne = "1 20";
@@ -414,7 +414,7 @@ int main()
     tests.push_back(false);
 #endif
 
-#if false
+#if true
     // Test 12: Recherche film
     Film* raidersOfTheLostArk = (librairie.chercherFilm("Raiders of the Lost Ark"));
     tests.push_back(raidersOfTheLostArk != nullptr &&
