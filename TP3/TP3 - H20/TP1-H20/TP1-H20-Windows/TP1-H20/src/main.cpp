@@ -8,6 +8,8 @@
 #include "Episode.h"
 #include "Saison.h"
 #include "GestionnaireAuteurs.h"
+#include "GestionnaireSaisons.h"
+#include "Media.h"
 #include <algorithm>
 #include <cctype>
 #include <iomanip>

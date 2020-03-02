@@ -26,13 +26,13 @@ bool Episode::operator==(unsigned int numEpisode)
 std::ostream& operator<<(std::ostream& os, const Episode& episode)
 {
     // To do
-	os << "Episode";
+	os << "\t" << "\t" << "Episode ";
 	if (episode.numEpisode_ < 10)
 	{
 		os << "0";
 	}
 	os << episode.numEpisode_;
-    os << ':' << episode.nom_ << '|' << "Durée:" << episode.duree_;
+    os << ':' << episode.nom_ << '|' << "Duree:" << episode.duree_;
     return os;
     
 }
