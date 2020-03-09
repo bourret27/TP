@@ -28,6 +28,7 @@
     <ClInclude Include="include\Pixel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Matrice.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Pixel.cpp" />
   </ItemGroup>
