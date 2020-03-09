@@ -48,8 +48,14 @@ static constexpr int CAPACITE_MATRICE = 100;
 /**
  * @brief constructeur par défaut de la classe
  */
-template <typename T> inline Matrice<T>::Matrice() {
+template <typename T> inline Matrice<T>::Matrice() : 
+    elements_(std::vector<std::vector<T>>(CAPACITE_MATRICE)), 
+    height_(0),
+    width_(0)
+{
   // TO DO
+    for (unsigned i = 0; i < elements_.size(); ++i)
+        elements_[i] = std::vector<T>(CAPACITE_MATRICE);
 }
 /**
  * @brief retourne le nombre de lignes de la matrice
@@ -66,4 +72,58 @@ template <typename T> inline size_t Matrice<T>::getWidth() const {
   return width_;
 }
 
+template <typename T> inline void Matrice<T>::setHeight(size_t height) {
+    if (height >= 0)
+        height_ = height;
+}
+
+template <typename T> inline void Matrice<T>::setWidth(size_t width) {
+    if (width >= 0)
+        width_ = width;
+}
+
+template <typename T> inline T Matrice<T>::operator()(const size_t& posY, const size_t& posX) const {
+    if (posY > height_ || posX > width_ || posY < 0 || posX < 0)
+        return T();
+    else
+        return elements_[posY][posX];
+}
+
+template <typename T> inline bool Matrice<T>::chargerDepuisFichier(const std::string& nomFichier) {
+    const char CARACTERE_ARRET = 'L';
+    std::ifstream fichierLecture(nomFichier);
+    std::string element;
+    if (fichierLecture)
+    {
+        while (std::getline(fichierLecture, element, CARACTERE_ARRET))
+        {
+            if (lireElement(element, width_++, height_++) == false)
+                return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+template <typename T> inline bool Matrice<T>::lireElement(const std::string& elementFichier, const size_t& posY, const size_t& posX) {
+    T elementAAjouter;
+    if (std::getline(cin, elementAAjouter))
+        return ajouterElement(elementAAjouter, posY, posX);
+    return false;
+}
+
+template <typename T> inline bool Matrice<T>::ajouterElement(T element, const size_t& posY, const size_t& posX) {
+    if (*(this)(posY, posX) != T())
+    {
+        elements[posY][posX] = element;
+        return true;
+    }
+    return false;
+        
+}
+
+template <typename T> inline std::unique_ptr<Matrice<T>> Matrice<T>::clone() const {
+    std::unique_ptr<Matrice<T>> copie = make_unique<Matrice<T>>(*this);
+    return copie;
+}
 #endif
