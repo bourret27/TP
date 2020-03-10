@@ -90,15 +90,22 @@ template <typename T> inline T Matrice<T>::operator()(const size_t& posY, const 
 }
 
 template <typename T> inline bool Matrice<T>::chargerDepuisFichier(const std::string& nomFichier) {
-    const char CARACTERE_ARRET = 'L';
+    const char CARACTERE_CHANGEMENT_LIGNE = 'L';
     std::ifstream fichierLecture(nomFichier);
     std::string element;
     if (fichierLecture)
     {
-        while (std::getline(fichierLecture, element, CARACTERE_ARRET))
+        while (!ws(fichierLecture).eof())
         {
-            if (lireElement(element, width_++, height_++) == false)
-                return false;
+            std::getline(fichierLecture, element);
+            if (element == CARACTERE_CHANGEMENT_LIGNE)
+            {
+                height_++;
+                width_ = 0;
+            }
+            else
+                if (lireElement(element, height_, width_++) == false)
+                    return false;
         }
         return true;
     }
@@ -106,9 +113,12 @@ template <typename T> inline bool Matrice<T>::chargerDepuisFichier(const std::st
 }
 
 template <typename T> inline bool Matrice<T>::lireElement(const std::string& elementFichier, const size_t& posY, const size_t& posX) {
+    std::istringstream stream(elementFichier);
     T elementAAjouter;
-    if (std::getline(cin, elementAAjouter))
+    if (stream >> elementFichier)
+    {
         return ajouterElement(elementAAjouter, posY, posX);
+    }
     return false;
 }
 
