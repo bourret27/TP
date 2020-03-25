@@ -4,6 +4,14 @@
  * Auteur : Nabil Dabouz
  */
 
+ /*
+  * Classe qui définit un template pour une matrice d'elements generiques.
+  * \file   Matrice.h
+  * \author William Bourret et Philippe De Blois
+  * \date   25 mars 2020
+  * Créé le 25 mars 2020
+  */
+
 #ifndef MATRICE_H
 #define MATRICE_H
 

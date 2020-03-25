@@ -1,3 +1,11 @@
+/*
+  * Fichier qui définit la classe Pixel.
+  * \file   Pixel.cpp
+  * \author William Bourret et Philippe De Blois
+  * \date   25 mars 2020
+  * Créé le 25 mars 2020
+  */
+
 #include "Pixel.h"
 
 /**
