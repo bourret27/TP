@@ -14,19 +14,33 @@ Pixel::Pixel(uint8_t rouge, uint8_t vert, uint8_t bleu)
     : rouge_(rouge), vert_(vert), bleu_(bleu) {}
 
 void Pixel::operator=(const Pixel &pixel) {
-  // TO DO
+	setRouge(pixel.getRouge());
+	setVert(pixel.getVert());
+	setBleu(pixel.getBleu());
 }
 
 void Pixel::setRouge(int rouge) {
-  // TO DO
+	// On clamp la borne supérieure
+	rouge = rouge > 255 ? 255 : rouge;
+	// On clamp la borne inférieure
+	rouge = rouge < 0 ? 0 : rouge;
+	rouge_ = static_cast<uint8_t>(rouge);
 }
 
 void Pixel::setVert(int vert) {
-  // TO DO
+	// On clamp la borne supérieure
+	vert = vert > 255 ? 255 : vert;
+	// On clamp la borne inférieure
+	vert = vert < 0 ? 0 : vert;
+	vert_ = static_cast<uint8_t>(vert);
 }
 
 void Pixel::setBleu(int bleu) {
-  // TO DO
+	// On clamp la borne supérieure
+	bleu = bleu > 255 ? 255 : bleu;
+	// On clamp la borne inférieure
+	bleu = bleu < 0 ? 0 : bleu;
+	bleu_ = static_cast<uint8_t>(bleu);
 }
 /**
  * @brief retourn l'attribut rouge_ du pixel
@@ -45,9 +59,22 @@ uint8_t Pixel::getVert() const { return vert_; }
 uint8_t Pixel::getBleu() const { return bleu_; }
 
 std::ostream &operator<<(std::ostream &os, Pixel pixel) {
-  // TO DO
+	// On copie les flags afin de pouvoir les retablir apres l'execution de la methode 
+	int flagsPrecedents = os.flags();
+	// On modifie les flags pour obtenir l'affichage desire
+	os << std::hex << std::setw(3) << std::setfill(' ') << std::left << std::uppercase;
+	// On affiche le pixel
+	os << '#' << pixel.getRouge() << pixel.getVert() << pixel.getBleu();
+	// On remet les flags comme avant
+	os.flags(flagsPrecedents);
+	return os;
 }
 
 std::istream &operator>>(std::istream &is, Pixel &pixel) {
-  // TO DO
+	int rouge = 0, vert = 0, bleu = 0;
+	is >> rouge >> vert >> bleu;
+	pixel.setRouge(rouge);
+	pixel.setVert(vert);
+	pixel.setBleu(bleu);
+	return is;
 }
