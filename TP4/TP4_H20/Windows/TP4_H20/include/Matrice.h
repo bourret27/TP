@@ -141,7 +141,17 @@ template <typename T> inline bool Matrice<T>::ajouterElement(T element, const si
 }
 
 template <typename T> inline std::unique_ptr<Matrice<T>> Matrice<T>::clone() const {
-    std::unique_ptr<Matrice<T>> copie = make_unique<Matrice<T>>(*this);
+	std::unique_ptr<Matrice<T>> copie = std::make_unique<Matrice<T>>(Matrice<T>());
+	copie->setHeight(getHeight());
+	copie->setWidth(getWidth());
+	for (std::size_t y = 0; y < copie->getHeight(); y++)
+	{
+		for (std::size_t x = 0; x < copie->getWidth(); x++)
+		{
+			copie->ajouterElement(elements_[y][x], y, x);
+		}
+	}
+    //std::unique_ptr<Matrice<T>> copie = make_unique<Matrice<T>>(*this);
     return copie;
 }
 #endif
