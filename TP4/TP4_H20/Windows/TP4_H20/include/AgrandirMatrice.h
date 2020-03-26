@@ -53,8 +53,8 @@ Coordonnees
 AgrandirMatrice<M>::trouverLePlusProcheVoisin(const unsigned int &rapport,
                                               size_t posY, size_t posX) const {
 	// La division entiere s'occupe d'obtenir le bon chiffre (equivalent a la fonction floor)
-	int voisinY = posY / rapport;
-	int voisinX = posX / rapport;
+	int voisinY = static_cast<int>(posY / rapport);
+	int voisinX = static_cast<int>(posX / rapport);
   return {voisinX, voisinY};
 }
 
@@ -75,7 +75,7 @@ template <class M> void AgrandirMatrice<M>::redimensionnerImage(const unsigned i
 			// Obtenir les coordonnees du plus proche voisin
 			Coordonnees coordsProcheVoisin = trouverLePlusProcheVoisin(rapport, y, x);
 			// On ajoute l'element a la matrice agrandie en allant le chercher dans la matrice originale
-			matriceAgrandie->ajouterElement(matrice_->(coordsProcheVoisin.y, coordsProcheVoisin.x), y, x);
+			matriceAgrandie->ajouterElement((*matrice_)(coordsProcheVoisin.y, coordsProcheVoisin.x), y, x);
 		}
 	}
 }
