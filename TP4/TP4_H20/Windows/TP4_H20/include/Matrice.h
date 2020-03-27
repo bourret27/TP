@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Titre : Matrice.h - Travail Pratique #4 - Programmation Orient�e Objet
  * Date : 27 F�vrier 2020
  * Auteur : Nabil Dabouz
@@ -81,24 +81,24 @@ template <typename T> inline size_t Matrice<T>::getWidth() const {
 }
 
 template <typename T> inline void Matrice<T>::setHeight(size_t height) {
-    if (height >= 0)
+    //if (height >= 0)
         height_ = height;
 }
 
 template <typename T> inline void Matrice<T>::setWidth(size_t width) {
-    if (width >= 0)
+    //if (width >= 0)
         width_ = width;
 }
 
 template <typename T> inline T Matrice<T>::operator()(const size_t& posY, const size_t& posX) const {
-    if (posY > height_ || posX > width_ || posY < 0 || posX < 0)
+    if (posY > height_ || posX > width_)
         return T();
     else
         return elements_[posY][posX];
 }
 
 template <typename T> inline bool Matrice<T>::chargerDepuisFichier(const std::string& nomFichier) {
-    const char CARACTERE_CHANGEMENT_LIGNE = 'L';
+    const std::string CARACTERE_CHANGEMENT_LIGNE = "L";
     std::ifstream fichierLecture(nomFichier);
     std::string element;
     if (fichierLecture)
@@ -106,13 +106,13 @@ template <typename T> inline bool Matrice<T>::chargerDepuisFichier(const std::st
         while (!ws(fichierLecture).eof())
         {
             std::getline(fichierLecture, element);
-            if (element[0] == CARACTERE_CHANGEMENT_LIGNE)
-            {
+            if (element == CARACTERE_CHANGEMENT_LIGNE) {
+                //nbLignes++;
                 height_++;
                 width_ = 0;
-            }
+            }                
             else
-                if (lireElement(element, height_, width_++) == false)
+                if (lireElement(element, height_ - 1, width_++) == false)
                     return false;
         }
         return true;
@@ -131,7 +131,7 @@ template <typename T> inline bool Matrice<T>::lireElement(const std::string& ele
 }
 
 template <typename T> inline bool Matrice<T>::ajouterElement(T element, const size_t& posY, const size_t& posX) {
-	if (!(posY > height_ || posX > width_ || posY < 0 || posX < 0))
+	if (!(posY > height_ || posX > width_))
 	{
 		elements_[posY][posX] = element;
 		return true;
