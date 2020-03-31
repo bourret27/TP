@@ -36,8 +36,7 @@ private:
  * @brief constructeur par défaut de la classe
  */
 template <class M> inline PivoterMatrice<M>::PivoterMatrice() : matrice_(nullptr) {
-  // TO DO
-
+    // rien à faire dans le corps du constructeur
 }
 /**
  * @brief constructeur par paramètre de la classe
@@ -48,7 +47,6 @@ template <class M> inline PivoterMatrice<M>::PivoterMatrice(M *matrice) : matric
  * @param coords les coordonnées du point originales
  */
 template <class M> inline Coordonnees PivoterMatrice<M>::changerCoordonneesCentreMatrice(Coordonnees coords) const {
-  // TO DO
     Coordonnees nouveauxCoords = {};
     nouveauxCoords.x = coords.x - matrice_->getWidth() / 2;
     nouveauxCoords.y = coords.y - matrice_->getHeight() / 2;
@@ -60,7 +58,6 @@ template <class M> inline Coordonnees PivoterMatrice<M>::changerCoordonneesCentr
  * @param coords les coordonnées du point originales
  */
 template <class M> inline Coordonnees PivoterMatrice<M>::recupererCoordonnees(Coordonnees coords) const {
-  // TO DO
     Coordonnees anciennesCoords = {};
     anciennesCoords.x = coords.x + matrice_->getWidth() / 2;
     anciennesCoords.y = coords.y + matrice_->getHeight() / 2;
@@ -68,23 +65,31 @@ template <class M> inline Coordonnees PivoterMatrice<M>::recupererCoordonnees(Co
 }
 
 template <class M> inline void PivoterMatrice<M>::pivoterMatrice(Direction direction) {
-    std::unique_ptr<M> matricePivotee = matrice_->clone();
-    
-    for (int y = 0; y < matricePivotee->getHeight(); ++y) {
-        for (int x = 0; x < matricePivotee->getHeight(); ++x) {
-            Coordonnees coordonnesActuels = changerCoordonneesCentreMatrice({ x, y });
-            if (direction == Direction::Right) {
-                coordonnesActuels.x = coordonnesActuels.y;
-                coordonnesActuels.y = -coordonnesActuels.x;
-            }
-            else if (direction == Direction::Left) {
-                coordonnesActuels.x = -coordonnesActuels.y;
-                coordonnesActuels.y = coordonnesActuels.x;
-            }
-            coordonnesActuels = recupererCoordonnees(coordonnesActuels);
-            matricePivotee->ajouterElement((*matrice_)(coordonnesActuels.y, coordonnesActuels.x), y, x);
+    //On sauvegarde l'ancienne matrice
+    std::unique_ptr<M> matriceOriginale = matrice_->clone();
+
+    //On calcule le coefficient de rotation
+    int sensRotation = (int)Direction::last_ * (int)direction + (int)Direction::first_;
+
+    //On pivote la matrice
+    for (int y = matrice_->getHeight() - 1; y >= 0; --y) {
+        for (int x = matrice_->getWidth() - 1; x >= 0; --x) {
+            //On change de système de coordonnées
+            Coordonnees coordonnesCentre = changerCoordonneesCentreMatrice({ x,y });
+
+            //On calcule les nouveaux points selon la rotation
+            Coordonnees coordonnesPivotees = {};
+            coordonnesPivotees.x = sensRotation * -coordonnesCentre.y;
+            coordonnesPivotees.y = sensRotation * coordonnesCentre.x;
+
+            //On retourne dans l'ancien système de coordonnées et on copie l'élément de la matrice originale dans la matrice pivotée 
+            Coordonnees coordonnesBase = recupererCoordonnees(coordonnesPivotees);
+            matrice_->ajouterElement((*matriceOriginale)(coordonnesBase.y, coordonnesBase.x), y, x);
+
         }
     }
+    
+    
 
 
 }

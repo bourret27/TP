@@ -107,7 +107,6 @@ template <typename T> inline bool Matrice<T>::chargerDepuisFichier(const std::st
         {
             std::getline(fichierLecture, element);
             if (element == CARACTERE_CHANGEMENT_LIGNE) {
-                //nbLignes++;
                 height_++;
                 width_ = 0;
             }                
@@ -136,11 +135,6 @@ template <typename T> inline bool Matrice<T>::ajouterElement(T element, const si
 		elements_[posY][posX] = element;
 		return true;
 	}
-	/*if ((*this)(posY, posX) != T())
-    {
-        elements_[posY][posX] = element;
-        return true;
-    }*/
     return false;
         
 }
@@ -156,7 +150,6 @@ template <typename T> inline std::unique_ptr<Matrice<T>> Matrice<T>::clone() con
 			copie->ajouterElement(elements_[y][x], y, x);
 		}
 	}
-    //std::unique_ptr<Matrice<T>> copie = make_unique<Matrice<T>>(*this);
     return copie;
 }
 #endif
