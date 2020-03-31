@@ -64,18 +64,20 @@ AgrandirMatrice<M>::trouverLePlusProcheVoisin(const unsigned int &rapport,
  */
 template <class M> void AgrandirMatrice<M>::redimensionnerImage(const unsigned int& rapport)
 {
-	std::unique_ptr<M> matriceAgrandie = matrice_->clone();
+	//std::unique_ptr<M> matriceAgrandie = matrice_->clone();
 	// On agrandit la matrice à agrandir
-	matriceAgrandie->setHeight(matriceAgrandie->getHeight() * rapport);
-	matriceAgrandie->setWidth(matriceAgrandie->getWidth() * rapport);
-	for (std::size_t y = 0; y < matriceAgrandie->getHeight(); y++)
+	std::size_t height = matrice_->getHeight();
+	std::size_t width = matrice_->getWidth();
+	matrice_->setHeight(height * rapport);
+	matrice_->setWidth(width * rapport);
+	for (int y = matrice_->getHeight() - 1; y >= 0; y--)
 	{
-		for (std::size_t x = 0; x < matriceAgrandie->getWidth(); x++)
+		for (int x = matrice_->getWidth() - 1; x >= 0; x--)
 		{
 			// Obtenir les coordonnees du plus proche voisin
 			Coordonnees coordsProcheVoisin = trouverLePlusProcheVoisin(rapport, y, x);
 			// On ajoute l'element a la matrice agrandie en allant le chercher dans la matrice originale
-			matriceAgrandie->ajouterElement((*matrice_)(coordsProcheVoisin.y, coordsProcheVoisin.x), y, x);
+			matrice_->ajouterElement((*matrice_)(coordsProcheVoisin.y, coordsProcheVoisin.x), y, x);
 		}
 	}
 }
