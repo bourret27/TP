@@ -80,16 +80,29 @@ template <typename T> inline size_t Matrice<T>::getWidth() const {
   return width_;
 }
 
+/**
+ * @brief retourne le nombre de colonnes de la matrice
+ * @param height, le nombre de lignes voulu dans la matrice
+ */
 template <typename T> inline void Matrice<T>::setHeight(size_t height) {
     //if (height >= 0)
         height_ = height;
 }
 
+/**
+ * @brief retourne le nombre de colonnes de la matrice
+ * @param width, le nombre de colonnes voulu dans la matrice
+ */
 template <typename T> inline void Matrice<T>::setWidth(size_t width) {
     //if (width >= 0)
         width_ = width;
 }
-
+/**
+* @brief retourne l'élément aux coordonnées indiquées
+* @param posY, la position en y
+* @param posX, la position en x
+* @return l'élément situé aux coordonnées indiquées 
+*/
 template <typename T> inline T Matrice<T>::operator()(const size_t& posY, const size_t& posX) const {
     if (posY > height_ || posX > width_)
         return T();
@@ -97,6 +110,11 @@ template <typename T> inline T Matrice<T>::operator()(const size_t& posY, const 
         return elements_[posY][posX];
 }
 
+/**
+* @brief lit une matrice à partir d'un fichier
+* @param nomFichier, le nom du fichier à lire
+* @return un booléen indiquant la réussite de la lecture
+*/
 template <typename T> inline bool Matrice<T>::chargerDepuisFichier(const std::string& nomFichier) {
     const std::string CARACTERE_CHANGEMENT_LIGNE = "L";
     std::ifstream fichierLecture(nomFichier);
@@ -119,6 +137,13 @@ template <typename T> inline bool Matrice<T>::chargerDepuisFichier(const std::st
     return false;
 }
 
+/**
+* @brief lit un élément à partir du chaîne lue dans le fichier précédent
+* @param elementFichier, la chaîne contenant l'élément à lire
+* @param posY, la position en y où on ajoute l'élément
+* @param posX, la position en x où on ajoute l'élément
+* @return un booléen indiquant la réussite de la lecture
+*/
 template <typename T> inline bool Matrice<T>::lireElement(const std::string& elementFichier, const size_t& posY, const size_t& posX) {
     std::istringstream stream(elementFichier);
     T elementAAjouter;
@@ -129,6 +154,13 @@ template <typename T> inline bool Matrice<T>::lireElement(const std::string& ele
     return false;
 }
 
+/**
+* @brief ajoute un élément dans la matrice
+* @param element, l'élément à ajouter
+* @param posY, la position en y où on ajoute l'élément
+* @param posX, la position en x où on ajoute l'élément
+* @return un booléen indiquant la réussite de l'ajout
+*/
 template <typename T> inline bool Matrice<T>::ajouterElement(T element, const size_t& posY, const size_t& posX) {
 	if (!(posY > height_ || posX > width_))
 	{
@@ -139,6 +171,10 @@ template <typename T> inline bool Matrice<T>::ajouterElement(T element, const si
         
 }
 
+/**
+* @brief retourne une copie de la matrice
+* @return un pointeur intelligent vers la copie de la matrice
+*/
 template <typename T> inline std::unique_ptr<Matrice<T>> Matrice<T>::clone() const {
 	std::unique_ptr<Matrice<T>> copie = std::make_unique<Matrice<T>>(Matrice<T>());
 	copie->setHeight(getHeight());

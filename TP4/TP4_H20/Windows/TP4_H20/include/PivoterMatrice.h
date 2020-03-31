@@ -45,6 +45,7 @@ template <class M> inline PivoterMatrice<M>::PivoterMatrice(M *matrice) : matric
 /**
  * @brief trouver les coordonnées du point par rapport au centre de la matrice
  * @param coords les coordonnées du point originales
+ * @return les coordonnées par rapport au centre de la matrice
  */
 template <class M> inline Coordonnees PivoterMatrice<M>::changerCoordonneesCentreMatrice(Coordonnees coords) const {
     Coordonnees nouveauxCoords = {};
@@ -56,6 +57,7 @@ template <class M> inline Coordonnees PivoterMatrice<M>::changerCoordonneesCentr
  * @brief revenir au système précédent, trouver les coordonnées du point par
  * rapport au premier élément de la matrice
  * @param coords les coordonnées du point originales
+ * @return les coordonnées par rapport au premier élément de la matrice
  */
 template <class M> inline Coordonnees PivoterMatrice<M>::recupererCoordonnees(Coordonnees coords) const {
     Coordonnees anciennesCoords = {};
@@ -64,6 +66,10 @@ template <class M> inline Coordonnees PivoterMatrice<M>::recupererCoordonnees(Co
     return anciennesCoords;
 }
 
+/**
+ * @brief pivoter une matrice
+ * @param la direction dans laquelle pivoter
+ */
 template <class M> inline void PivoterMatrice<M>::pivoterMatrice(Direction direction) {
     //On sauvegarde l'ancienne matrice
     std::unique_ptr<M> matriceOriginale = matrice_->clone();
