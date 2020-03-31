@@ -69,10 +69,11 @@ uint8_t Pixel::getBleu() const { return bleu_; }
 std::ostream &operator<<(std::ostream &os, Pixel pixel) {
 	// On copie les flags afin de pouvoir les retablir apres l'execution de la methode 
 	int flagsPrecedents = os.flags();
-	// On modifie les flags pour obtenir l'affichage desire
-	os << std::hex << std::setw(3) << std::setfill(' ') << std::left << std::uppercase;
-	// On affiche le pixel
-	os << '#' << pixel.getRouge() << pixel.getVert() << pixel.getBleu();
+	os << '#';
+	// On affiche le pixel en modifiant les flags à chaque fois pour éviter que les flags non-sticky se reset (voir https://stackoverflow.com/questions/1532640/which-iomanip-manipulators-are-sticky)
+	os << std::hex << std::setw(2) << std::setfill('0') << std::right << std::uppercase << int(pixel.getRouge()) << ' ';
+	os << std::hex << std::setw(2) << std::setfill('0') << std::right << std::uppercase << int(pixel.getVert()) << ' ';
+	os << std::hex << std::setw(2) << std::setfill('0') << std::right << std::uppercase << int(pixel.getBleu());
 	// On remet les flags comme avant
 	os.flags(flagsPrecedents);
 	return os;

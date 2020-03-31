@@ -4,6 +4,14 @@
  * Auteur : Nabil Dabouz
  */
 
+ /*
+  * Classe qui définit un template pour pivoter une matrice.
+  * \file   PivoterMatrice.h
+  * \author William Bourret et Philippe De Blois
+  * \date   25 mars 2020
+  * Créé le 25 mars 2020
+  */
+
 #ifndef PIVOTER_MATRICE_H
 #define PIVOTER_MATRICE_H
 
