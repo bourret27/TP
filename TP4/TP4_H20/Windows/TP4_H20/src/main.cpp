@@ -22,7 +22,7 @@
 int main() {
   initDebogageMemoire();
   std::vector<bool> tests;
-#if true
+#if false
   Matrice<int> matriceNombres;
   if (matriceNombres.chargerDepuisFichier("matrice_nombres.txt")) {
     Image<Matrice<int>> *imageNombres =
