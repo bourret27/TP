@@ -14,16 +14,12 @@
 /// \return                     Une référence au stream.
 std::ostream& operator<<(std::ostream& outputStream, const GestionnaireUtilisateurs& gestionnaireUtilisateurs)
 {
-    // TODO: Uncomment une fois que la fonction getNombreUtilisateurs est écrite
-    outputStream << "Le gestionnaire d'utilisateurs contient " // << gestionnaireUtilisateurs.getNombreUtilisateurs()
+    outputStream << "Le gestionnaire d'utilisateurs contient " << gestionnaireUtilisateurs.getNombreUtilisateurs()
                  << " utilisateurs:\n";
 
-    // TODO: Réécrire l'implémentation avec des range-based for et structured bindings (voir énoncé du TP)
-    for (auto it = gestionnaireUtilisateurs.utilisateurs_.cbegin();
-         it != gestionnaireUtilisateurs.utilisateurs_.cend();
-         ++it)
+    for (const auto& [idUtilisateur, utilisateur] : gestionnaireUtilisateurs.utilisateurs_)
     {
-        outputStream << '\t' << it->second << '\n';
+        outputStream << '\t' << utilisateur << '\n';
     }
     return outputStream;
 }
@@ -52,8 +48,7 @@ bool GestionnaireUtilisateurs::chargerDepuisFichier(const std::string& nomFichie
 
             if (stream >> id >> std::quoted(nom) >> age >> pays)
             {
-                // TODO: Uncomment une fois que la fonction ajouterUtilisateur est écrite
-                // ajouterUtilisateur(Utilisateur{id, nom, age, static_cast<Pays>(pays)});
+				ajouterUtilisateur(Utilisateur{id, nom, age, static_cast<Pays>(pays)});
             }
             else
             {
@@ -66,4 +61,41 @@ bool GestionnaireUtilisateurs::chargerDepuisFichier(const std::string& nomFichie
     }
     std::cerr << "Erreur GestionnaireUtilisateurs: le fichier " << nomFichier << " n'a pas pu être ouvert\n";
     return false;
+}
+
+
+/// Ajoute un utilisateur au gestionnaire.
+/// \param utilisateur         L'utilisateur à ajouter au gestionnaire.
+/// \return                    Un booléen indiquant si l'utilisateur a été ajouté ou s'il était déjà présent.
+bool GestionnaireUtilisateurs::ajouterUtilisateur(const Utilisateur& utilisateur)
+{
+	return utilisateurs_.emplace(utilisateur.id, utilisateur).second;
+}
+
+/// Supprime un utilisateur du gestionnaire.
+/// \param utilisateur         L'utilisateur à supprimer du gestionnaire.
+/// \return                    Un booléen indiquant si l'utilisateur a été supprimé ou s'il n'était déjà pas présent.
+bool GestionnaireUtilisateurs::supprimerUtilisateur(const std::string& idUtilisateur)
+{
+	return utilisateurs_.erase(idUtilisateur) != 0;
+}
+
+/// Retourne le nombre d'utilisateurs dans le gestionnaire.
+/// \return                    Le nombre d'utilisateurs dans le gestionnaire.
+std::size_t GestionnaireUtilisateurs::getNombreUtilisateurs() const
+{
+	return utilisateurs_.size();
+}
+
+/// Retourne un pointeur pointant vers l'utilisateur selon l'id spécifié.
+/// \param utilisateur         L'id de l'utilisateur à chercher.
+/// \return                    Le pointeur vers l'utilisateur recherché. nullptr si pas trouvé.
+const Utilisateur* GestionnaireUtilisateurs::getUtilisateurParId(const std::string& id) const
+{
+	std::unordered_map<std::string, Utilisateur>::const_iterator iterateurUtilisateur = utilisateurs_.find(id);
+	if (iterateurUtilisateur == utilisateurs_.end())
+	{
+		return nullptr;
+	}
+	return &iterateurUtilisateur->second;
 }
