@@ -15,63 +15,63 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\Downloads\TP5_H20\src\AnalyseurLogs.cpp">
+    <ClCompile Include="src\AnalyseurLogs.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Downloads\TP5_H20\src\Film.cpp">
+    <ClCompile Include="src\Film.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Downloads\TP5_H20\src\GestionnaireFilms.cpp">
+    <ClCompile Include="src\GestionnaireFilms.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Downloads\TP5_H20\src\GestionnaireUtilisateurs.cpp">
+    <ClCompile Include="src\GestionnaireUtilisateurs.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Downloads\TP5_H20\src\main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Downloads\TP5_H20\src\Pays.cpp">
+    <ClCompile Include="src\Pays.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Downloads\TP5_H20\src\Tests.cpp">
+    <ClCompile Include="src\Tests.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Downloads\TP5_H20\src\Utilisateur.cpp">
+    <ClCompile Include="src\Utilisateur.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\AnalyseurLogs.h">
+    <ClInclude Include="src\AnalyseurLogs.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\Film.h">
+    <ClInclude Include="src\Film.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\Foncteurs.h">
+    <ClInclude Include="src\Foncteurs.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\GestionnaireFilms.h">
+    <ClInclude Include="src\GestionnaireFilms.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\GestionnaireUtilisateurs.h">
+    <ClInclude Include="src\GestionnaireUtilisateurs.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\LigneLog.h">
+    <ClInclude Include="src\LigneLog.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\Pays.h">
+    <ClInclude Include="src\Pays.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\RawPointerBackInserter.h">
+    <ClInclude Include="src\RawPointerBackInserter.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\Tests.h">
+    <ClInclude Include="src\Tests.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\Utilisateur.h">
+    <ClInclude Include="src\Utilisateur.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Downloads\TP5_H20\include\WindowsUnicodeConsole.h">
+    <ClInclude Include="src\WindowsUnicodeConsole.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
