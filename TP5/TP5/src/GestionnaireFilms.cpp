@@ -48,11 +48,8 @@ std::ostream& operator<<(std::ostream& outputStream, const GestionnaireFilms& ge
                  << "Affichage par catégories:\n";
 
     // TODO: Réécrire l'implémentation avec des range-based for et structured bindings (voir énoncé du TP)
-    for (auto it = gestionnaireFilms.filtreGenreFilms_.cbegin(); it != gestionnaireFilms.filtreGenreFilms_.cend();
-            ++it)
+    for (const auto& [genre, listeFilms] : gestionnaireFilms.filtreGenreFilms_)
     {
-        Film::Genre genre = it->first;
-        std::vector<const Film*> listeFilms = it->second;
         outputStream << "Genre: " << getGenreString(genre) << " (" << listeFilms.size() << " films):\n";
         for (std::size_t i = 0; i < listeFilms.size(); i++)
         {
@@ -110,15 +107,15 @@ bool GestionnaireFilms::chargerDepuisFichier(const std::string& nomFichier)
 /// \return                    Un booléen indiquant si le film a été ajouté ou s'il était déjà présent.
 bool GestionnaireFilms::ajouterFilm(const Film& film)
 {
-	if (getFilmParNom(film.nom) == nullptr)
+	if (getFilmParNom(film.nom) != nullptr)
 	{
 		return false;
 	}
 	std::unique_ptr<Film> smartPtrFilm = std::make_unique<Film>(film);
-	films_.push_back(smartPtrFilm);
 	filtreNomFilms_.emplace(film.nom, smartPtrFilm.get());
 	filtreGenreFilms_[film.genre].push_back(smartPtrFilm.get());
 	filtrePaysFilms_[film.pays].push_back(smartPtrFilm.get());
+	films_.push_back(std::move(smartPtrFilm));
 	return true;
 }
 
@@ -127,7 +124,7 @@ bool GestionnaireFilms::ajouterFilm(const Film& film)
 /// \return                    Un booléen indiquant si le film a été supprimé ou s'il n'était déjà pas présent.
 bool GestionnaireFilms::supprimerFilm(const std::string& nomFilm)
 {
-	auto iterateurFilm = std::find_if(films_.begin(), films_.end(), [&nomFilm](std::unique_ptr<Film> film) -> bool { return (*film).nom == nomFilm; });
+	auto iterateurFilm = std::find_if(films_.begin(), films_.end(), [&nomFilm](const std::unique_ptr<Film> &ptrFilm) -> bool { return (*ptrFilm).nom == nomFilm; });
 	// On aurait pu utiliser la méthode getFilmParNom avant de rechercher l'itérateur et retourner false si le film n'existe pas.
 	// Toutefois, dans le cas où le film existe, on se retrouverait à faire la recherche du film deux fois dans deux conteneurs différents.
 	// En faisant une seule recherche, même si elle est plus complexe (car on n'utilise pas les filtres stockés en tant qu'unordered_map),
@@ -138,10 +135,11 @@ bool GestionnaireFilms::supprimerFilm(const std::string& nomFilm)
 		return false;
 	}
 	filtreNomFilms_.erase(nomFilm);
+	auto predicatFilm = [&nomFilm](const Film* ptrFilm) -> bool { return (*ptrFilm).nom == nomFilm; };
 	std::vector<const Film*>& vecteurGenre = filtreGenreFilms_[(**iterateurFilm).genre];
-	vecteurGenre.erase(std::remove(vecteurGenre.begin(), vecteurGenre.end(), **iterateurFilm));
+	vecteurGenre.erase(std::remove_if(vecteurGenre.begin(), vecteurGenre.end(), predicatFilm));
 	std::vector<const Film*>& vecteurPays = filtrePaysFilms_[(**iterateurFilm).pays];
-	vecteurPays.erase(std::remove(vecteurPays.begin(), vecteurPays.end(), **iterateurFilm));
+	vecteurPays.erase(std::remove_if(vecteurPays.begin(), vecteurPays.end(), predicatFilm));
 	films_.erase(iterateurFilm);
 	return true;
 }
@@ -189,10 +187,15 @@ std::vector<const Film*> GestionnaireFilms::getFilmsParPays(Pays pays) const
 	return iterateurVecteur->second;
 }
 
-std::vector<const Film*> getFilmsEntreAnnees(int anneeDebut, int anneeFin)
+std::vector<const Film*> GestionnaireFilms::getFilmsEntreAnnees(int anneeDebut, int anneeFin)
 {
 	// TODO
-	return std::vector<const Film*>();
+	std::vector<const Film*> vecteurAnnees;
+	std::copy_if(films_.begin(), films_.end(), RawPointerBackInserter(vecteurAnnees), [&](const std::unique_ptr<Film>& ptrfilm) -> bool
+		{
+			return EstDansIntervalleDatesFilm(anneeDebut, anneeFin)(ptrfilm);
+		});
+	return vecteurAnnees;
 }
 
 
