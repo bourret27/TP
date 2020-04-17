@@ -47,7 +47,6 @@ std::ostream& operator<<(std::ostream& outputStream, const GestionnaireFilms& ge
     outputStream << "Le gestionnaire de films contient " << gestionnaireFilms.getNombreFilms() << " films.\n"
                  << "Affichage par catégories:\n";
 
-    // TODO: Réécrire l'implémentation avec des range-based for et structured bindings (voir énoncé du TP)
     for (const auto& [genre, listeFilms] : gestionnaireFilms.filtreGenreFilms_)
     {
         outputStream << "Genre: " << getGenreString(genre) << " (" << listeFilms.size() << " films):\n";
@@ -164,8 +163,8 @@ const Film* GestionnaireFilms::getFilmParNom(const std::string& nom) const
 	return iterateurFilm->second;
 }
 
-/// Retourne un vecteur de pointeurs bruts vers les film du genre spécifié.
-/// \param nom				   Le genre des films à chercher.
+/// Retourne un vecteur de pointeurs bruts vers les films du genre spécifié.
+/// \param genre			   Le genre des films à chercher.
 /// \return                    Le vecteur de pointeurs des films du genre recherché. Vecteur vide si aucun film du genre.
 std::vector<const Film*> GestionnaireFilms::getFilmsParGenre(Film::Genre genre) const
 {
@@ -177,6 +176,9 @@ std::vector<const Film*> GestionnaireFilms::getFilmsParGenre(Film::Genre genre) 
 	return iterateurVecteur->second;
 }
 
+/// Retourne un vecteur de pointeurs bruts vers les films du pays spécifié.
+/// \param pays				   Le pays des films à chercher.
+/// \return                    Le vecteur de pointeurs des films du pays recherché. Vecteur vide si aucun film du genre.
 std::vector<const Film*> GestionnaireFilms::getFilmsParPays(Pays pays) const
 {
 	auto iterateurVecteur = filtrePaysFilms_.find(pays);
@@ -187,9 +189,12 @@ std::vector<const Film*> GestionnaireFilms::getFilmsParPays(Pays pays) const
 	return iterateurVecteur->second;
 }
 
+/// Retourne un vecteur de pointeurs bruts vers les films des années spécifiées.
+/// \param anneeDebut		   L'année de début des films à chercher.
+/// \param anneeFin			   L'année de fin des films à chercher.
+/// \return                    Le vecteur de pointeurs des films des années recherchées. Vecteur vide si aucun film du genre.
 std::vector<const Film*> GestionnaireFilms::getFilmsEntreAnnees(int anneeDebut, int anneeFin)
 {
-	// TODO
 	std::vector<const Film*> vecteurAnnees;
 	std::copy_if(films_.begin(), films_.end(), RawPointerBackInserter(vecteurAnnees), [&](const std::unique_ptr<Film>& ptrfilm) -> bool
 		{
