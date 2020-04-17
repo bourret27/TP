@@ -11,9 +11,9 @@
 #include "Film.h"
 #include "LigneLog.h"
 
-class EstDansIntervallesDatesFilm {
+class EstDansIntervalleDatesFilm {
 public:
-	EstDansIntervallesDatesFilm(int anneeInferieure, int anneeSuperieure) : anneeInferieure_(anneeInferieure), anneeSuperieure_(anneeSuperieure) {}
+	EstDansIntervalleDatesFilm(int anneeInferieure, int anneeSuperieure) : anneeInferieure_(anneeInferieure), anneeSuperieure_(anneeSuperieure) {}
 	bool operator()(const std::unique_ptr<Film>& film) 
 	{
 		return film->annee >= anneeInferieure_ && film->annee <= anneeSuperieure_;
@@ -27,7 +27,7 @@ private:
 
 class ComparateurLog {
 public:
-	bool operator(LigneLog logA, LigneLog logB) 
+	bool operator()(const LigneLog& logA, const LigneLog& logB) 
 	{
 		return logA.timestamp < logB.timestamp;
 	}
@@ -37,8 +37,7 @@ public:
 template<typename T1, typename T2>
 class ComparateurSecondElementPaire {
 public:
-	ComparateurSecondElementPaire();
-	bool operator(const std::pair<T1, T2>& pairA, const std::pair<T1, T2>& pairB)
+	bool operator()(const std::pair<T1, T2>& pairA, const std::pair<T1, T2>& pairB)
 	{
 		return pairA.second < pairB.second;
 	}
