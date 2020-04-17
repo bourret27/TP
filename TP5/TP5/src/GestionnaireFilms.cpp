@@ -22,8 +22,7 @@ GestionnaireFilms::GestionnaireFilms(const GestionnaireFilms& other)
 
     for (const auto& film : other.films_)
     {
-        // TODO: Uncomment une fois que la fonction ajouterFilm est écrite
-        // ajouterFilm(*film);
+		ajouterFilm(*film);
     }
 }
 
@@ -45,8 +44,7 @@ GestionnaireFilms& GestionnaireFilms::operator=(GestionnaireFilms other)
 /// \return                     Une référence au stream.
 std::ostream& operator<<(std::ostream& outputStream, const GestionnaireFilms& gestionnaireFilms)
 {
-    // TODO: Uncomment une fois que la fonction getNombreFilms est écrite
-    outputStream << "Le gestionnaire de films contient " // << gestionnaireFilms.getNombreFilms() << " films.\n"
+    outputStream << "Le gestionnaire de films contient " << gestionnaireFilms.getNombreFilms() << " films.\n"
                  << "Affichage par catégories:\n";
 
     // TODO: Réécrire l'implémentation avec des range-based for et structured bindings (voir énoncé du TP)
@@ -92,8 +90,7 @@ bool GestionnaireFilms::chargerDepuisFichier(const std::string& nomFichier)
 
             if (stream >> std::quoted(nom) >> genre >> pays >> std::quoted(realisateur) >> annee)
             {
-                // TODO: Uncomment une fois que la fonction ajouterFilm est écrite
-                // ajouterFilm(Film{nom, static_cast<Film::Genre>(genre), static_cast<Pays>(pays), realisateur, annee});
+				ajouterFilm(Film{nom, static_cast<Film::Genre>(genre), static_cast<Pays>(pays), realisateur, annee});
             }
             else
             {
@@ -107,3 +104,95 @@ bool GestionnaireFilms::chargerDepuisFichier(const std::string& nomFichier)
     std::cerr << "Erreur GestionnaireFilms: le fichier " << nomFichier << " n'a pas pu être ouvert\n";
     return false;
 }
+
+/// Ajoute un film au gestionnaire.
+/// \param film				   Le film à ajouter au gestionnaire.
+/// \return                    Un booléen indiquant si le film a été ajouté ou s'il était déjà présent.
+bool GestionnaireFilms::ajouterFilm(const Film& film)
+{
+	if (getFilmParNom(film.nom) == nullptr)
+	{
+		return false;
+	}
+	std::unique_ptr<Film> smartPtrFilm = std::make_unique<Film>(film);
+	films_.push_back(smartPtrFilm);
+	filtreNomFilms_.emplace(film.nom, smartPtrFilm.get());
+	filtreGenreFilms_[film.genre].push_back(smartPtrFilm.get());
+	filtrePaysFilms_[film.pays].push_back(smartPtrFilm.get());
+	return true;
+}
+
+/// Supprime un film du gestionnaire.
+/// \param utilisateur         Le film à supprimer du gestionnaire.
+/// \return                    Un booléen indiquant si le film a été supprimé ou s'il n'était déjà pas présent.
+bool GestionnaireFilms::supprimerFilm(const std::string& nomFilm)
+{
+	auto iterateurFilm = std::find_if(films_.begin(), films_.end(), [&nomFilm](std::unique_ptr<Film> film) -> bool { return (*film).nom == nomFilm; });
+	// On aurait pu utiliser la méthode getFilmParNom avant de rechercher l'itérateur et retourner false si le film n'existe pas.
+	// Toutefois, dans le cas où le film existe, on se retrouverait à faire la recherche du film deux fois dans deux conteneurs différents.
+	// En faisant une seule recherche, même si elle est plus complexe (car on n'utilise pas les filtres stockés en tant qu'unordered_map),
+	// on obtient un temps de recherche moyen plus bas, surtout considérant qu'en principe, les films devraient exister plus souvent
+	// qu'autrement.
+	if (iterateurFilm == films_.end())
+	{
+		return false;
+	}
+	filtreNomFilms_.erase(nomFilm);
+	std::vector<const Film*>& vecteurGenre = filtreGenreFilms_[(**iterateurFilm).genre];
+	vecteurGenre.erase(std::remove(vecteurGenre.begin(), vecteurGenre.end(), **iterateurFilm));
+	std::vector<const Film*>& vecteurPays = filtrePaysFilms_[(**iterateurFilm).pays];
+	vecteurPays.erase(std::remove(vecteurPays.begin(), vecteurPays.end(), **iterateurFilm));
+	films_.erase(iterateurFilm);
+	return true;
+}
+
+/// Retourne le nombre de films dans le gestionnaire.
+/// \return                    Le nombre de films dans le gestionnaire.
+std::size_t GestionnaireFilms::getNombreFilms() const
+{
+	return films_.size();
+}
+
+/// Retourne un pointeur pointant vers le film selon le nom spécifié.
+/// \param nom				   Le nom du film à chercher.
+/// \return                    Le pointeur vers le film recherché. nullptr si pas trouvé.
+const Film* GestionnaireFilms::getFilmParNom(const std::string& nom) const
+{
+	std::unordered_map<std::string, const Film*>::const_iterator iterateurFilm = filtreNomFilms_.find(nom);
+	if (iterateurFilm == filtreNomFilms_.end())
+	{
+		return nullptr;
+	}
+	return iterateurFilm->second;
+}
+
+/// Retourne un vecteur de pointeurs bruts vers les film du genre spécifié.
+/// \param nom				   Le genre des films à chercher.
+/// \return                    Le vecteur de pointeurs des films du genre recherché. Vecteur vide si aucun film du genre.
+std::vector<const Film*> GestionnaireFilms::getFilmsParGenre(Film::Genre genre) const
+{
+	auto iterateurVecteur = filtreGenreFilms_.find(genre);
+	if (iterateurVecteur == filtreGenreFilms_.end())
+	{
+		return std::vector<const Film*>();
+	}
+	return iterateurVecteur->second;
+}
+
+std::vector<const Film*> GestionnaireFilms::getFilmsParPays(Pays pays) const
+{
+	auto iterateurVecteur = filtrePaysFilms_.find(pays);
+	if (iterateurVecteur == filtrePaysFilms_.end())
+	{
+		return std::vector<const Film*>();
+	}
+	return iterateurVecteur->second;
+}
+
+std::vector<const Film*> getFilmsEntreAnnees(int anneeDebut, int anneeFin)
+{
+	// TODO
+	return std::vector<const Film*>();
+}
+
+

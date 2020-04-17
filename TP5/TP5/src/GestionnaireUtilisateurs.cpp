@@ -73,8 +73,8 @@ bool GestionnaireUtilisateurs::ajouterUtilisateur(const Utilisateur& utilisateur
 }
 
 /// Supprime un utilisateur du gestionnaire.
-/// \param utilisateur         L'utilisateur à supprimer du gestionnaire.
-/// \return                    Un booléen indiquant si l'utilisateur a été supprimé ou s'il n'était déjà pas présent.
+/// \param idUtilisateur         L'id de l'utilisateur à supprimer du gestionnaire.
+/// \return                      Un booléen indiquant si l'utilisateur a été supprimé ou s'il n'était déjà pas présent.
 bool GestionnaireUtilisateurs::supprimerUtilisateur(const std::string& idUtilisateur)
 {
 	return utilisateurs_.erase(idUtilisateur) != 0;
@@ -88,7 +88,7 @@ std::size_t GestionnaireUtilisateurs::getNombreUtilisateurs() const
 }
 
 /// Retourne un pointeur pointant vers l'utilisateur selon l'id spécifié.
-/// \param utilisateur         L'id de l'utilisateur à chercher.
+/// \param id				   L'id de l'utilisateur à chercher.
 /// \return                    Le pointeur vers l'utilisateur recherché. nullptr si pas trouvé.
 const Utilisateur* GestionnaireUtilisateurs::getUtilisateurParId(const std::string& id) const
 {
