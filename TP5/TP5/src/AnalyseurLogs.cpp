@@ -39,7 +39,6 @@ bool AnalyseurLogs::chargerDepuisFichier(const std::string& nomFichier,
 
             if (stream >> timestamp >> idUtilisateur >> std::quoted(nomFilm))
             {
-                // TODO: Uncomment une fois que la fonction creerLigneLog est écrite
                 creerLigneLog(timestamp, idUtilisateur, nomFilm, gestionnaireUtilisateurs, gestionnaireFilms);
             }
             else
@@ -68,12 +67,13 @@ bool AnalyseurLogs::creerLigneLog(const std::string& timestamp,
                                   GestionnaireUtilisateurs& gestionnaireUtilisateurs, 
                                   GestionnaireFilms& gestionnaireFilms)
 {
-    if (gestionnaireUtilisateurs.getUtilisateurParId(idUtilisateur) == nullptr &&
+    if (gestionnaireUtilisateurs.getUtilisateurParId(idUtilisateur) == nullptr ||
         gestionnaireFilms.getFilmParNom(nomFilm) == nullptr)
     {
         return false;
     }
-    ajouterLigneLog({ timestamp, gestionnaireUtilisateurs.getUtilisateurParId(idUtilisateur), gestionnaireFilms.getFilmParNom(nomFilm) });
+	LigneLog ligneAAjouter = { timestamp, gestionnaireUtilisateurs.getUtilisateurParId(idUtilisateur), gestionnaireFilms.getFilmParNom(nomFilm) };
+    ajouterLigneLog(ligneAAjouter);
     return true;
 }
 
@@ -82,7 +82,7 @@ bool AnalyseurLogs::creerLigneLog(const std::string& timestamp,
 void AnalyseurLogs::ajouterLigneLog(const LigneLog& ligneLog)
 {
     ComparateurLog comparateur;
-    logs_.insert(std::upper_bound(logs_.begin(), logs_.end(), ligneLog, comparateur), ligneLog);
+    logs_.insert(std::lower_bound(logs_.begin(), logs_.end(), ligneLog, comparateur), ligneLog);
     vuesFilms_[ligneLog.film]++;
 }
 
@@ -94,7 +94,7 @@ int AnalyseurLogs::getNombreVuesFilm(const Film* film) const
     auto iterateurFilm = vuesFilms_.find(film);
     if (iterateurFilm == vuesFilms_.end())
     {
-        return -1;
+        return 0;
     }
     return iterateurFilm->second;
 }
@@ -131,7 +131,7 @@ std::vector<std::pair<const Film*, int>> AnalyseurLogs::getNFilmsPlusPopulaires(
 /// \return                         Le nombre de vues pour un cet utilisateur.
 int AnalyseurLogs::getNombreVuesPourUtilisateur(const Utilisateur* utilisateur) const
 {
-    return std::count_if(logs_.begin(), logs_.end(), [&utilisateur](const LigneLog& ligneLog) { return (*ligneLog.utilisateur).id == (*utilisateur).id; });
+    return std::count_if(logs_.begin(), logs_.end(), [&utilisateur](const LigneLog& ligneLog) { return ligneLog.utilisateur == utilisateur; });
 }
 
 /// Crée un vecteur des films vus par l'utilisateur.
@@ -140,9 +140,9 @@ int AnalyseurLogs::getNombreVuesPourUtilisateur(const Utilisateur* utilisateur) 
 std::vector<const Film*> AnalyseurLogs::getFilmsVusParUtilisateur(const Utilisateur* utilisateur) const
 {
     std::unordered_set<const Film*> filmsACopier;
-    for (LigneLog ligneLog : logs_)
+    for (const LigneLog &ligneLog : logs_)
     {
-        if (ligneLog.utilisateur->nom == utilisateur->nom)
+        if (ligneLog.utilisateur == utilisateur)
         {
             filmsACopier.insert(ligneLog.film);
         }
