@@ -40,7 +40,7 @@ bool AnalyseurLogs::chargerDepuisFichier(const std::string& nomFichier,
             if (stream >> timestamp >> idUtilisateur >> std::quoted(nomFilm))
             {
                 // TODO: Uncomment une fois que la fonction creerLigneLog est écrite
-                // creerLigneLog(timestamp, idUtilisateur, nomFilm, gestionnaireUtilisateurs, gestionnaireFilms);
+                creerLigneLog(timestamp, idUtilisateur, nomFilm, gestionnaireUtilisateurs, gestionnaireFilms);
             }
             else
             {
@@ -116,14 +116,14 @@ const Film* AnalyseurLogs::getFilmPlusPopulaire() const
 /// \return                         Un vecteur de paires de films et de vues contenant les films les plus populaires
 std::vector<std::pair<const Film*, int>> AnalyseurLogs::getNFilmsPlusPopulaires(std::size_t nombre) const
 {
-    std::vector<std::pair<const Film*, int>> filmsPopulaires = std::vector<std::pair<const Film*, int>>(std::min(nombre, vuesFilms_.size()));
-    std::sort(vuesFilms_.begin(), vuesFilms_.end(), [](const std::pair<const Film*, int>& paireA, const std::pair<const Film*, int>& paireB) {
-        return paireA.second > paireB.second;
-        });
-    std::copy_n(vuesFilms_.begin(), std::min(nombre, vuesFilms_.size()), std::back_inserter(filmsPopulaires));
+    //On copie les paires dans un vecteur pour utiliser la méthode sort
+    std::vector<std::pair<const Film*, int>> filmsACopier = std::vector<std::pair<const Film*, int>>(vuesFilms_.begin(), vuesFilms_.end());
+    std::sort(filmsACopier.begin(), filmsACopier.end(), [](const std::pair<const Film*, int>& paireA, const std::pair<const Film*, int>& paireB)
+        {return paireA.second > paireB.second; });
+    std::size_t grandeurVecteur = std::min(nombre, vuesFilms_.size());
+    std::vector<std::pair<const Film*, int>> filmsPopulaires;
+    std::copy_n(filmsACopier.begin(), grandeurVecteur, std::back_inserter(filmsPopulaires));
     return filmsPopulaires;
-    
-
 }
 
 /// Retourne le nombre de vues pour un utilisateur.
@@ -131,10 +131,7 @@ std::vector<std::pair<const Film*, int>> AnalyseurLogs::getNFilmsPlusPopulaires(
 /// \return                         Le nombre de vues pour un cet utilisateur.
 int AnalyseurLogs::getNombreVuesPourUtilisateur(const Utilisateur* utilisateur) const
 {
-    return std::count(logs_.begin(), logs_.end(), [utilisateur](std::vector<LigneLog>::const_iterator it)
-        {
-            return it->utilisateur->nom == utilisateur->nom;
-        });
+    return std::count(logs_.begin(), logs_.end(), [](const LigneLog& ligneLog) {return true; });
 }
 
 /// Crée un vecteur des films vus par l'utilisateur.

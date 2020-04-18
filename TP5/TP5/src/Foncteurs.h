@@ -10,7 +10,8 @@
 #include "Film.h"
 #include "LigneLog.h"
 
-class EstDansIntervalleDatesFilm {
+class EstDansIntervalleDatesFilm 
+{
 public:
 	EstDansIntervalleDatesFilm(int anneeInferieure, int anneeSuperieure) : anneeInferieure_(anneeInferieure), anneeSuperieure_(anneeSuperieure) {}
 	/// Retourne un booléen indiquant si le film est sorti durant les années spécifiées dans le foncteur.
@@ -27,7 +28,8 @@ private:
 
 };
 
-class ComparateurLog {
+class ComparateurLog 
+{
 public:
 	/// Compare deux lignes de log et retourne un booléen indiquant si la première ligne est strictement plus ancienne que la deuxième.
 	/// \param logA		   La première ligne de log.
@@ -41,7 +43,8 @@ public:
 };
 
 template<typename T1, typename T2>
-class ComparateurSecondElementPaire {
+class ComparateurSecondElementPaire 
+{
 public:
 	/// Compare deux paires de types et indique si le second élément de la paire 1 est strictement plus petit que le second élément de la paire 2.
 	/// \param pairA		   La première paire.
