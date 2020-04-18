@@ -131,7 +131,7 @@ std::vector<std::pair<const Film*, int>> AnalyseurLogs::getNFilmsPlusPopulaires(
 /// \return                         Le nombre de vues pour un cet utilisateur.
 int AnalyseurLogs::getNombreVuesPourUtilisateur(const Utilisateur* utilisateur) const
 {
-    return std::count(logs_.begin(), logs_.end(), [](const LigneLog& ligneLog) {return true; });
+    return std::count_if(logs_.begin(), logs_.end(), [&utilisateur](const LigneLog& ligneLog) { return (*ligneLog.utilisateur).id == (*utilisateur).id; });
 }
 
 /// Crée un vecteur des films vus par l'utilisateur.
