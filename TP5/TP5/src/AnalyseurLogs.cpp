@@ -68,12 +68,12 @@ bool AnalyseurLogs::creerLigneLog(const std::string& timestamp,
                                   GestionnaireUtilisateurs& gestionnaireUtilisateurs, 
                                   GestionnaireFilms& gestionnaireFilms)
 {
-    if (gestionnaireUtilisateurs.getUtilisateurParId(idUtilisateur) == nullptr &&
+    if (gestionnaireUtilisateurs.getUtilisateurParId(idUtilisateur) == nullptr ||
         gestionnaireFilms.getFilmParNom(nomFilm) == nullptr)
     {
         return false;
     }
-    ajouterLigneLog({ timestamp, gestionnaireUtilisateurs.getUtilisateurParId(idUtilisateur), gestionnaireFilms.getFilmParNom(nomFilm) });
+    ajouterLigneLog({timestamp, gestionnaireUtilisateurs.getUtilisateurParId(idUtilisateur), gestionnaireFilms.getFilmParNom(nomFilm)});
     return true;
 }
 
@@ -91,12 +91,12 @@ void AnalyseurLogs::ajouterLigneLog(const LigneLog& ligneLog)
 /// \return                         Le nombre de vues pour ce film.
 int AnalyseurLogs::getNombreVuesFilm(const Film* film) const
 {
-    auto iterateurFilm = vuesFilms_.find(film);
-    if (iterateurFilm == vuesFilms_.end())
+    std::unordered_map<const Film*, int>::const_iterator iterateurFilm = vuesFilms_.find(film);
+    if (iterateurFilm != vuesFilms_.end())
     {
-        return -1;
+        return iterateurFilm->second;
     }
-    return iterateurFilm->second;
+    return 0;
 }
 
 /// Cherche le film le plus populaire.
@@ -109,6 +109,7 @@ const Film* AnalyseurLogs::getFilmPlusPopulaire() const
         return nullptr;
     }
     return std::max_element(vuesFilms_.begin(), vuesFilms_.end(), comparateur)->first;
+    return nullptr;
 }
 
 /// Cherche un certain nombre des films les plus populaires.
@@ -118,10 +119,14 @@ std::vector<std::pair<const Film*, int>> AnalyseurLogs::getNFilmsPlusPopulaires(
 {
     //On copie les paires dans un vecteur pour utiliser la méthode sort
     std::vector<std::pair<const Film*, int>> filmsACopier = std::vector<std::pair<const Film*, int>>(vuesFilms_.begin(), vuesFilms_.end());
+
+    //On trie les films du plus populaire au moins populaire
     std::sort(filmsACopier.begin(), filmsACopier.end(), [](const std::pair<const Film*, int>& paireA, const std::pair<const Film*, int>& paireB)
         {return paireA.second > paireB.second; });
+    
+    //On crée le vecteur des films populaires
     std::size_t grandeurVecteur = std::min(nombre, vuesFilms_.size());
-    std::vector<std::pair<const Film*, int>> filmsPopulaires;
+    std::vector<std::pair<const Film*, int>> filmsPopulaires = std::vector<std::pair<const Film*, int>>();
     std::copy_n(filmsACopier.begin(), grandeurVecteur, std::back_inserter(filmsPopulaires));
     return filmsPopulaires;
 }
@@ -131,7 +136,9 @@ std::vector<std::pair<const Film*, int>> AnalyseurLogs::getNFilmsPlusPopulaires(
 /// \return                         Le nombre de vues pour un cet utilisateur.
 int AnalyseurLogs::getNombreVuesPourUtilisateur(const Utilisateur* utilisateur) const
 {
-    return std::count(logs_.begin(), logs_.end(), [](const LigneLog& ligneLog) {return true; });
+    return std::count_if(logs_.begin(), logs_.end(), [&utilisateur](const LigneLog& ligneLog) 
+        {return ligneLog.utilisateur->id == utilisateur->id; });
+ 
 }
 
 /// Crée un vecteur des films vus par l'utilisateur.
@@ -139,13 +146,13 @@ int AnalyseurLogs::getNombreVuesPourUtilisateur(const Utilisateur* utilisateur) 
 /// \return                         Un vecteur contenant tous les films vus par l'utilisateur.
 std::vector<const Film*> AnalyseurLogs::getFilmsVusParUtilisateur(const Utilisateur* utilisateur) const
 {
-    std::unordered_set<const Film*> filmsACopier;
+   /* std::unordered_set<const Film*> filmsACopier;
     for (LigneLog ligneLog : logs_)
     {
         if (ligneLog.utilisateur->nom == utilisateur->nom)
         {
             filmsACopier.insert(ligneLog.film);
         }
-    }
-    return std::vector<const Film*>(filmsACopier.begin(), filmsACopier.end());
+    }*/
+    return std::vector<const Film*>();// (filmsACopier.begin(), filmsACopier.end());
 }
